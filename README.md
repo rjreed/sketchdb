@@ -1,5 +1,5 @@
 # carDB
-![image info](/carDB/head.jpg)
+![image info](/head.jpg)
 
 ### Installation
 This is a small file/directory based CRUD app that mimics some basic database functionality.
