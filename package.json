@@ -1,0 +1,20 @@
+{
+  "name": "carDB",
+  "version": "0.1.0",
+  "description": "A simple directory/file based database app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "bin": {
+    "carDB-setup": "./setup.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "fs-extra": "^10.1.0",
+    "jest": "^27.5.1",
+    "rimraf": "^3.0.2"
+  }
+}
