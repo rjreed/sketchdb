@@ -105,7 +105,7 @@ test(`carDB.list_tables returns an array of the table names`, async () => {
   const recieved_array = await carDB.list_tables();
 
   expect(recieved_array.length).toEqual(expected_array.length);
-  
+
   expect(recieved_array).toEqual(expect.arrayContaining(recieved_array));
 });
 
@@ -116,13 +116,13 @@ test(`carDB.create_table creates a table`, async () => {
   const _tables = await carDB.list_tables();
 
   expect(stat.isDirectory()).toBe(true);
-  
+
   expect(_tables).toContain(table_3);
 });
 
 test(`carDB.create_table rejects if given a duplicate table name`, async () => {
-  const create_call =  carDB.create_table(table_1)
-  
+  const create_call = carDB.create_table(table_1)
+
   expect(create_call).rejects.toThrow();;
 });
 
@@ -137,8 +137,8 @@ test(`carDB.insert inserts an object into new row`, async () => {
 
 
 test(`carDB.insert rejects if given a duplicate row id`, async () => {
-  const insert_call =  carDB.insert(table_1, 1, data_1)
-  
+  const insert_call = carDB.insert(table_1, 1, data_1)
+
   expect(insert_call).rejects.toThrow();;
 });
 
@@ -173,7 +173,7 @@ test(`carDB.get_all returns all of a table's data`, async () => {
 });
 
 test(`carDB.get_all rejects with an error if given an incorrect table name`, async () => {
-  const retrieved_row =  carDB.get_all('incorrect_table')
+  const retrieved_row = carDB.get_all('incorrect_table')
 
   expect(retrieved_row).rejects.toThrow();
 });
@@ -207,7 +207,7 @@ afterAll(() => {
 afterAll(() => {
 
   fse.copy(static_path, tables_path)
-  
-  
+
+
 
 });

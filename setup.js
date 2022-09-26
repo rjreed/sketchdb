@@ -42,7 +42,7 @@ function setup() {
         //// resolve when completed
         resolve();
       })
-      })
+    })
   })
 }
 

@@ -1,8 +1,14 @@
 # carDB
 
-
 ### Installation
-This is a small file/directory based CRUD app that mimics some basic database functionality.
+This is a small file/directory based CRUD app for Node JS that provides some basic database functionality.
+
+The purpose of this library is to provide a simple database-like storage system for things like small personal projects where integrating a robust database program would be overkill.
+
+It has no dependencies (dev dependencies are jest, fs-extra, and rimraf).
+
+*Note: This library is currently in a Zero-version and it's API may change.* 
+
 
 ### Installation
 
@@ -35,12 +41,26 @@ Calls to retrieve data will resolve to that data or reject with an error.
 
 Calls to write data will resolve to an object describing the completed task or reject with an error.
 
-### carDB.create_table
+(The library uses snake-case. Sssss)
+
+### Methods
+
+
+- [carDB.create_table](#create_table)
+- [carDB.insert](#insert)
+- [carDB.get_row](#get_row)
+- [carDB.get_all](#get_all)
+- [carDB.update](#update)
+- [carDB.delete_row](#delete_row)
+- [carDB.filter](#filter)
+
+
+### <a name="create_table"></a> carDB.create_table
 Creates a new table in the database.
 
 **Syntax:** 
 ```javascript
-carDB.create_table( "table_name" )
+carDB.create_table( 'table_name' )
 ```
 
 **Parameters:** table_name: The name of the table to create (as a string)
@@ -59,7 +79,7 @@ carDB.create_table('users')
   });
 ```
 
-### carDB.insert
+### <a name="insert"></a> carDB.insert
 Inserts a new row into a given table in the database.
 
 **Syntax:** 
@@ -82,11 +102,11 @@ const user_1 = {
     'group': '1"
 }
 
-const unique_id = "uq13g564d"
+const unique_id = 'uq13g564d'
 
 const stringified = JSON.stringify(user_1)
 
-carDB.insert("users", unique_id, stringified);
+carDB.insert('users', unique_id, stringified);
     .then(function(results, error) {
         if (error) {
             //// handle the error
@@ -96,7 +116,7 @@ carDB.insert("users", unique_id, stringified);
   });
 ```
 
-### carDB.get_row
+### <a name="get_row"></a> carDB.get_row
 Retrieves a row from a given table.
 
 **Syntax:** 
@@ -124,7 +144,7 @@ carDB.get_row('users', '178')
 ```
 
 
-### carDB.get_all
+### <a name="get_all"></a> carDB.get_all
 Retrieves all rows from a given table as an array of objects.
 
 **Syntax:** 
@@ -150,7 +170,7 @@ carDB.get_all('users')
   });
 ```
 
-### carDB.update
+### <a name="update"></a> carDB.update
 Updates a row with new and/or replacement data as key-value pairs of an object. 
 
 
@@ -160,9 +180,12 @@ carDB.update( id, table_name, data )
 ```
 
 **Parameters:** 
-id: a string containing the id for the row. Must be unique to the table and valid as a directory name.
-table_name: The name of the table the row belongs to.
-data: The data to be used to update the row. 
+
+*id:* a string containing the id for the row. Must be unique to the table and valid as a directory name.
+
+*table_name:* The name of the table the row belongs to.
+
+*data:* The data to be used to update the row. 
 
 **Return value:** Returns a Promise.  When resolved, Promise returns an object formatted like: 
 ```javascript
@@ -179,7 +202,7 @@ const user_1 = {
 const new_data = {
     'group': '2'
 }
-const unique_id = "uq13g564d"
+const unique_id = 'uq13g564d'
 
 carDB.update("users", unique_id, new_data);
     .then(function(results, error) {
@@ -199,7 +222,7 @@ carDB.update("users", unique_id, new_data);
 ```
 
 
-### carDB.delete_row 
+### <a name="delete_row"></a> carDB.delete_row
 Deletes a row from a given table.
 
 **Syntax:** 
@@ -229,3 +252,56 @@ carDB.delete_row('users', '178')
     success_function(results);
   });
 ```
+
+
+### <a name="filter"></a> carDB.filter
+Updates a row with new and/or replacement data as key-value pairs of an object. 
+
+
+**Syntax:** 
+```javascript
+carDB.update( id, table_name, data )
+```
+
+**Parameters:** 
+
+***id:*** a string containing the id for the row. Must be unique to the table and valid as a directory name.
+
+***table_name:*** The name of the table the row belongs to.
+
+***data:*** The data to be used to update the row. 
+
+**Return value:** Returns a Promise.  When resolved, Promise returns an object formatted like: 
+```javascript
+{ 'updated': id, 'table': table_name }
+```
+
+**Example usage:** 
+
+```javascript
+const user_1 = {
+    'name':'Bobby Knuckles',
+    'group': '1'
+}
+const new_data = {
+    'group': '2'
+}
+const unique_id = 'uq13g564d'
+
+carDB.update("users", unique_id, new_data);
+    .then(function(results, error) {
+        if (error) {
+            //// handle the error
+        }
+        
+        /* the updated row's object will look like :
+        {
+            'name':'Bobby Knuckles',
+            'group': '2'
+         }
+       */
+    
+    success_function(results);
+  });
+```
+

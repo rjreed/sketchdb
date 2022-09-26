@@ -36,11 +36,11 @@ carDB.insert = function(table, id, data) {
     const row_path = path.join(store_directory, 'tables/', table, id + '/');
 
     //// stringify the data
-    const  stringified =  JSON.stringify(data);
+    const stringified = JSON.stringify(data);
 
     //// make the folder 
     fsp.mkdir(row_path).then(async () => {
-       //// write the stringified data to a json file in the folder
+      //// write the stringified data to a json file in the folder
       await fsp.writeFile(row_path + id + '.json', stringified).catch(error => {
         reject(error);
       });
