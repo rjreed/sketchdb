@@ -6,6 +6,10 @@
   "scripts": {
     "test": "jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rjreed/carDB"
+  },
   "bin": {
     "carDB-setup": "./setup.js"
   },
