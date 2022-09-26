@@ -144,6 +144,7 @@ test(`carDB.insert rejects if given a duplicate row id`, async () => {
 
 
 
+
 test(`carDB.update modifies a key value pair in a row`, async () => {
   await carDB.update(table_1, 1, data_3_update_1)
 
@@ -192,6 +193,16 @@ test(`carDB.filter return rows containing a given key-value pair`, async () => {
   expect(retrieved_row).toEqual([data_5, data_6]);
 });
 
+
+/*
+test(`carDB.delete_table deletes a table's directories/files`, async () => {
+  await carDB.delete_table(table_3)
+
+  const exists = await fse.pathExists(path.resolve(table_3_path,))
+
+  expect(exists).toBe(false);
+});
+*/
 
 
 /// Teardown and Setup

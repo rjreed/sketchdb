@@ -3,9 +3,9 @@
 ### Installation
 This is a small file/directory based CRUD app for Node JS that provides some basic database functionality.
 
-The purpose of this library is to provide a simple database-like storage system for things like small personal projects where integrating a robust database program would be overkill.
+The purpose of this library is to provide a simple database-like storage system for things like small personal projects. It is written to be easy to setup and use.
 
-It has no dependencies (dev dependencies are jest, fs-extra, and rimraf).
+It has no dependencies (dev dependencies are jest, fs-extra, and rimraf). License is 0-clause BSD.
 
 *Note: This library is currently in a Zero-version and it's API may change.* 
 

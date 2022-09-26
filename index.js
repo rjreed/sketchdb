@@ -8,7 +8,7 @@ const fsp = require('fs').promises;
 /// vendor libs
 
 /// app/local libs
-
+const utils = require('./utils');
 
 // APP
 
@@ -33,18 +33,16 @@ carDB.insert = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     //// path to the item/file to be written
-    const row_path = path.join(store_directory, 'tables/', table, id + '/');
+    const row_path = path.join(store_directory, 'tables/', table, id + '.json');
 
     //// stringify the data
     const stringified = JSON.stringify(data);
 
     //// make the folder 
-    fsp.mkdir(row_path).then(async () => {
-      //// write the stringified data to a json file in the folder
-      await fsp.writeFile(row_path + id + '.json', stringified).catch(error => {
-        reject(error);
-      });
-      resolve([table, id, data]);
+
+    //// write the stringified data to a json file in the folder
+    await fsp.writeFile(row_path, stringified, { flag: "wx" } ).then(() => {
+      resolve();
     }).catch(error => {
       reject(error);
     });
@@ -57,8 +55,8 @@ carDB.insert = function(table, id, data) {
 carDB.update = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
-    const row_path = path.join(store_directory, 'tables/', table, id + '/');
-    const raw = await fsp.readFile(row_path + id + '.json', 'utf8').catch(error => {
+    const row_path = path.join(store_directory, 'tables/', table, id + '.json');
+    const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
       reject(error);
     });
     const new_object = JSON.parse(raw);
@@ -71,7 +69,7 @@ carDB.update = function(table, id, data) {
     }
 
     //// write updated data to row file
-    await fsp.writeFile(row_path + id + '.json', JSON.stringify(new_object)).catch(error => {
+    await fsp.writeFile(row_path, JSON.stringify(new_object)).catch(error => {
       reject(error);
     });
 
@@ -85,8 +83,8 @@ carDB.update = function(table, id, data) {
 carDB.get_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
-    const row_path = path.join(store_directory, 'tables/', table, id + '/');
-    const raw = await fsp.readFile(row_path + id + '.json', 'utf8').catch(error => {
+    const row_path = path.join(store_directory, 'tables/', table, id + '.json');
+    const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
       reject(error);
     });
     const new_object = JSON.parse(raw);
@@ -148,7 +146,7 @@ carDB.get_all = function(table) {
 
         //// push all the parsed data from the files into the 'data' array
         await Promise.all(files.map(async (file) => {
-          const row_path = path.join(table_path, file, file + '.json');
+          const row_path = path.join(table_path, file);
           const contents = await fsp.readFile(row_path, 'utf8');
 
           data.push(JSON.parse(contents));
@@ -192,10 +190,10 @@ carDB.delete_row = function(table, id) {
   return new Promise(async function(resolve, reject) {
 
     //// path to the row to be deleted
-    const table_path = path.join(store_directory, 'tables/', table + '/', id + '/');
+    const row_path = path.join(store_directory, 'tables/', table + '/', id + '.json');
 
     //// test that the path exists with access, throw err if it doesn't
-    fsp.access(table_path).then(async function(err) {
+    fsp.access(row_path).then(async function(err) {
       if (err) {
         console.log(err);
         resolve(false);
@@ -203,10 +201,7 @@ carDB.delete_row = function(table, id) {
       else {
 
         //// unlink/delete the json file for the row
-        await fsp.unlink(path.join(table_path, id + '.json'));
-
-        //// delete the directory for the row
-        await fsp.rmdir(table_path);
+        await fsp.unlink(path.join(row_path));
 
         resolve(true);
 
@@ -214,6 +209,31 @@ carDB.delete_row = function(table, id) {
     });
   });
 };
+
+
+//// function to delete a row in a table
+carDB.delete_table = function(table) {
+
+  return new Promise(async function(resolve, reject) {
+
+    //// path to the row to be deleted
+    const table_path = path.join(store_directory, 'tables/', table + '/')
+
+    fsp.readdir(table_path).then(async files => {
+
+
+      Promise.all(files.map(async (file) => {
+        utils.delete_directory(path.resolve(table_path, file))
+      })).then(results =>
+        resolve({ 'deleted': table })).catch(error => {
+        reject(error);
+      });
+    })
+
+
+  });
+};
+
 
 // EXPORTS
 module.exports = carDB;
