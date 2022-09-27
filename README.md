@@ -43,7 +43,7 @@ Calls to write data or perform a delete operation will resolve with true on succ
 
 ### Methods
 
-
+- [sketchdb.list_tables](#list_tables)
 - [sketchdb.create_table](#create_table)
 - [sketchdb.insert](#insert)
 - [sketchdb.get_row](#get_row)
@@ -53,6 +53,37 @@ Calls to write data or perform a delete operation will resolve with true on succ
 - [sketchdb.delete_table](#delete_table)
 - [sketchdb.filter](#filter)
 
+### <a name="list_tables"></a> sketchdb.list_tables
+Inserts a new row into a given table in the database.
+
+**Syntax:** 
+```javascript
+sketchdb.list_tables()
+```
+
+**Parameters:** 
+
+none
+
+**Return value:** Returns a Promise. When resolved, Promise returns 
+
+**Example usage:** 
+
+```javascript
+
+sketchdb.list_tables();
+    .then(function(results, error) {
+        if (error) {
+            //// handle the error
+        }
+  do_something_with_results();
+  
+  /*
+  Results will be an array of the table names such as ["users","posts","authors"]
+  */
+   
+  });
+```
 
 ### <a name="create_table"></a> sketchdb.create_table
 Creates a new table in the database.
