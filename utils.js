@@ -20,29 +20,11 @@ utils.delete_directory = function(path) {
 
   return new Promise(function(resolve, reject) {
 
-    //// function to iterate through files and run fs.unlinkSync on them
-    fsp.readdir(path).then(files => {
-
-      files.forEach(function(file, index) {
-        let curPath = path + "/" + file;
-        fs.unlinkSync(curPath);
-      });
-
-      //// delete directory
-      fsp.rmdir(path).then(() => {
-        resolve();
-      }).catch(error => {
-        reject(error);
-      });
-
-    }).catch(error => {
+    fsp.rm(path, { recursive: true, force: true }).then(() =>
+      resolve()).catch(error => {
       reject(error);
-    });
-
-
-
+    })
   });
-
 };
 
 

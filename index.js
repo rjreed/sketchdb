@@ -41,8 +41,8 @@ carDB.insert = function(table, id, data) {
     //// make the folder 
 
     //// write the stringified data to a json file in the folder
-    await fsp.writeFile(row_path, stringified, { flag: "wx" } ).then(() => {
-      resolve();
+    await fsp.writeFile(row_path, stringified, { flag: "wx" }).then(() => {
+      resolve(true);
     }).catch(error => {
       reject(error);
     });
@@ -73,7 +73,7 @@ carDB.update = function(table, id, data) {
       reject(error);
     });
 
-    resolve({ 'updated': id });
+    resolve(true);
 
   });
 
@@ -106,7 +106,7 @@ carDB.create_table = function(table) {
       reject(error);
     });;
 
-    resolve();
+    resolve(true);
 
   });
 
@@ -196,7 +196,7 @@ carDB.delete_row = function(table, id) {
     fsp.access(row_path).then(async function(err) {
       if (err) {
         console.log(err);
-        resolve(false);
+        reject(err);
       }
       else {
 
@@ -219,15 +219,9 @@ carDB.delete_table = function(table) {
     //// path to the row to be deleted
     const table_path = path.join(store_directory, 'tables/', table + '/')
 
-    fsp.readdir(table_path).then(async files => {
-
-
-      Promise.all(files.map(async (file) => {
-        utils.delete_directory(path.resolve(table_path, file))
-      })).then(results =>
-        resolve({ 'deleted': table })).catch(error => {
-        reject(error);
-      });
+    fsp.rm(table_path, { recursive: true, force: true }).then(() =>
+      resolve(true)).catch(error => {
+      reject(error);
     })
 
 

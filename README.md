@@ -1,13 +1,12 @@
 # carDB
 
-### Installation
-This is a small file/directory based CRUD app for Node JS that provides some basic database functionality.
+### About
+This is a small file/directory based CRUD app for Node JS that provides some basic database functionality for storing key-value pairs.
 
 The purpose of this library is to provide a simple database-like storage system for things like small personal projects. It is written to be easy to setup and use.
 
-It has no dependencies (dev dependencies are jest, fs-extra, and rimraf). License is 0-clause BSD.
 
-*Note: This library is currently in a Zero-version and it's API may change.* 
+*Note: This library is currently in a Zero-version and the API may change.* 
 
 
 ### Installation
@@ -39,9 +38,8 @@ All function calls to carDB return a Promise.
 
 Calls to retrieve data will resolve to that data or reject with an error. 
 
-Calls to write data will resolve to an object describing the completed task or reject with an error.
+Calls to write data or perform a delete operation will resolve with true on success (this will probably change to an object of some sort with more info but haven't decided yet)
 
-(The library uses snake-case. Sssss)
 
 ### Methods
 
@@ -52,6 +50,7 @@ Calls to write data will resolve to an object describing the completed task or r
 - [carDB.get_all](#get_all)
 - [carDB.update](#update)
 - [carDB.delete_row](#delete_row)
+- [carDB.delete_table](#delete_table)
 - [carDB.filter](#filter)
 
 
@@ -253,6 +252,33 @@ carDB.delete_row('users', '178')
   });
 ```
 
+### <a name="delete_table"></a> carDB.delete_table
+Deletes a table and all contents (rows).
+
+**Syntax:** 
+```javascript
+carDB.delete_table( table_name )
+```
+
+**Parameters:** 
+table_name: The name of the table as a string.
+
+**Return value:** Returns a Promise. When resolved, Promise returns true.
+
+```
+
+
+**Example usage:** 
+```javascript
+carDB.delete_table('students')
+  .then(function(result, error) {
+    if (error) {
+      //// handle the error
+    }
+    
+    success_function();
+  });
+```
 
 ### <a name="filter"></a> carDB.filter
 Updates a row with new and/or replacement data as key-value pairs of an object. 

@@ -9,7 +9,6 @@ const path = require('path');
 
 /// vendor libs
 const fse = require('fs-extra');
-const rimraf = require('rimraf')
 
 /// app/local libs
 const carDB = require('../index.js');
@@ -194,31 +193,29 @@ test(`carDB.filter return rows containing a given key-value pair`, async () => {
 });
 
 
-/*
-test(`carDB.delete_table deletes a table's directories/files`, async () => {
-  await carDB.delete_table(table_3)
 
-  const exists = await fse.pathExists(path.resolve(table_3_path,))
+test(`carDB.delete_table deletes a table's directories/files`, async () => {
+  await carDB.delete_table(table_1)
+
+  const exists = await fse.pathExists(table_1_path)
 
   expect(exists).toBe(false);
 });
-*/
+
 
 
 /// Teardown and Setup
 
 //// delete all the test fixtures
 afterAll(() => {
-  return new Promise(resolve => {
-    rimraf(tables_path, resolve)
-  });
+ 
+  return fsp.rm(tables_path, { recursive: true, force: true });
+
 });
 
 //// copy the static fixtures over to the tables path
-afterAll(() => {
-
-  fse.copy(static_path, tables_path)
-
-
+afterAll(async () => {
+  
+  return fsp.cp(static_path, tables_path,  { recursive: true })
 
 });
