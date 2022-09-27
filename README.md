@@ -62,7 +62,9 @@ Creates a new table in the database.
 sketchdb.create_table( 'table_name' )
 ```
 
-**Parameters:** table_name: The name of the table to create (as a string)
+**Parameters:** 
+
+table_name: The name of the table to create (as a string)
 
 **Return value:** Returns a Promise. When resolved, Promise returns 
 
@@ -87,8 +89,11 @@ sketchdb.insert( id, table_name, data )
 ```
 
 **Parameters:** 
+
 id: a string containing the id for the row. Must be unique to the table and valid as a directory name.
+
 table_name: The name of the table to insert the row into. Table must already exist.
+
 data: The data to be inserted. Will be written as a json file. Can be a JS object or valid JSON string.
 
 **Return value:** Returns a Promise. When resolved, Promise returns 
@@ -124,7 +129,9 @@ sketchdb.get_row( table_name, id )
 ```
 
 **Parameters:** 
+
 table_name: The name of the table the row belongs to.
+
 id: a string containing the id for the row to retrieve. 
 
 
@@ -152,6 +159,7 @@ sketchdb.get_all( table_name )
 ```
 
 **Parameters:** 
+
 table_name: The name of the table.
 
 **Return value:** Returns a Promise. When resolved, Promise returns 
@@ -186,10 +194,7 @@ sketchdb.update( id, table_name, data )
 
 *data:* The data to be used to update the row. 
 
-**Return value:** Returns a Promise.  When resolved, Promise returns an object formatted like: 
-```javascript
-{ 'updated': id, 'table': table_name }
-```
+**Return value:** Returns a Promise.  When resolved, Promise returns 
 
 **Example usage:** 
 
@@ -230,15 +235,13 @@ sketchdb.delete_row( table_name, id )
 ```
 
 **Parameters:** 
+
 table_name: The name of the table the row belongs to.
+
 id: a string containing the id for the row to delete. 
 
 
-**Return value:** Returns a Promise. When resolved, Promise returns an object formatted like: 
-```javascript
-{ 'deleted': id, 'table': table_name }
-```
-
+**Return value:** Returns a Promise. When resolved, Promise returns 
 
 **Example usage:** 
 ```javascript
@@ -261,6 +264,7 @@ sketchdb.delete_table( table_name )
 ```
 
 **Parameters:** 
+
 table_name: The name of the table as a string.
 
 **Return value:** Returns a Promise. When resolved, Promise returns true.
@@ -297,10 +301,7 @@ sketchdb.update( id, table_name, data )
 
 ***data:*** The data to be used to update the row. 
 
-**Return value:** Returns a Promise.  When resolved, Promise returns an object formatted like: 
-```javascript
-{ 'updated': id, 'table': table_name }
-```
+**Return value:** Returns a Promise.  When resolved, Promise returns 
 
 **Example usage:** 
 
