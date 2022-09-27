@@ -10,7 +10,7 @@ const path = require('path');
 /// vendor libs
 
 /// app/local libs
-const sketchDB = require('../index.js');
+const sketchdb = require('../index.js');
 const utils = require('../utils.js')
 
 
@@ -100,104 +100,104 @@ const data_7 = [data_4, data_5, data_6];
 test(`Test environment variables are setup`, () => {
   expect(process.env.NODE_ENV).toBe('test');
   
-  expect(sketchDB._store).toBe(fixtures_path);
+  expect(sketchdb._store).toBe(fixtures_path);
 });
 
-test(`sketchDB.list_tables returns an array of the table names`, async () => {
+test(`sketchdb.list_tables returns an array of the table names`, async () => {
 
   const expected_array = [table_1, table_2];
-  const recieved_array = await sketchDB.list_tables();
+  const recieved_array = await sketchdb.list_tables();
 
   expect(recieved_array.length).toEqual(expected_array.length);
 
   expect(recieved_array).toEqual(expect.arrayContaining(recieved_array));
 });
 
-test(`sketchDB.create_table creates a table`, async () => {
-  await sketchDB.create_table(table_3);
+test(`sketchdb.create_table creates a table`, async () => {
+  await sketchdb.create_table(table_3);
 
   const stat = await fsp.stat(path.join(tables_path, table_3));
-  const _tables = await sketchDB.list_tables();
+  const _tables = await sketchdb.list_tables();
 
   expect(stat.isDirectory()).toBe(true);
 
   expect(_tables).toContain(table_3);
 });
 
-test(`sketchDB.create_table rejects if given a duplicate table name`, async () => {
-  const create_call = sketchDB.create_table(table_1);
+test(`sketchdb.create_table rejects if given a duplicate table name`, async () => {
+  const create_call = sketchdb.create_table(table_1);
 
   expect(create_call).rejects.toThrow();
 });
 
-test(`sketchDB.insert inserts an object into new row`, async () => {
-  await sketchDB.insert(table_1, 2, data_2);
+test(`sketchdb.insert inserts an object into new row`, async () => {
+  await sketchdb.insert(table_1, 2, data_2);
 
 
-  const retrieved_row = await sketchDB.get_row(table_1, 2);
+  const retrieved_row = await sketchdb.get_row(table_1, 2);
 
   expect(retrieved_row).toEqual(data_2);
 });
 
 
-test(`sketchDB.insert rejects if given a duplicate row id`, async () => {
-  const insert_call = sketchDB.insert(table_1, 1, data_1);
+test(`sketchdb.insert rejects if given a duplicate row id`, async () => {
+  const insert_call = sketchdb.insert(table_1, 1, data_1);
 
   expect(insert_call).rejects.toThrow();
 });
 
 
-test(`sketchDB.update modifies a key value pair in a row`, async () => {
-  await sketchDB.update(table_1, 1, data_3_update_1);
+test(`sketchdb.update modifies a key value pair in a row`, async () => {
+  await sketchdb.update(table_1, 1, data_3_update_1);
 
-  const retrieved_row = await sketchDB.get_row(table_1, 1);
+  const retrieved_row = await sketchdb.get_row(table_1, 1);
 
   expect(retrieved_row).toEqual(data_3_2);
 });
 
-test(`sketchDB.update can add a new key-value pair`, async () => {
-  await sketchDB.update(table_1, 1, data_3_update_2);
+test(`sketchdb.update can add a new key-value pair`, async () => {
+  await sketchdb.update(table_1, 1, data_3_update_2);
 
-  const retrieved_row = await sketchDB.get_row(table_1, 1);
+  const retrieved_row = await sketchdb.get_row(table_1, 1);
 
   expect(retrieved_row).toEqual(data_3_3);
 });
 
-test(`sketchDB.get_row returns a row's data`, async () => {
-  const retrieved_row = await sketchDB.get_row(table_1, 2);
+test(`sketchdb.get_row returns a row's data`, async () => {
+  const retrieved_row = await sketchdb.get_row(table_1, 2);
 
   expect(retrieved_row).toEqual(data_2);
 });
 
-test(`sketchDB.get_all returns all of a table's data`, async () => {
-  const retrieved_row = await sketchDB.get_all(table_2);
+test(`sketchdb.get_all returns all of a table's data`, async () => {
+  const retrieved_row = await sketchdb.get_all(table_2);
 
   expect(retrieved_row).toEqual(data_7);
 });
 
-test(`sketchDB.get_all rejects with an error if given an incorrect table name`, async () => {
-  const retrieved_row = sketchDB.get_all('incorrect_table');
+test(`sketchdb.get_all rejects with an error if given an incorrect table name`, async () => {
+  const retrieved_row = sketchdb.get_all('incorrect_table');
 
   expect(retrieved_row).rejects.toThrow();
 });
 
-test(`sketchDB.delete_row deletes a row directory/file`, async () => {
-  await sketchDB.delete_row(table_1, 3);
+test(`sketchdb.delete_row deletes a row directory/file`, async () => {
+  await sketchdb.delete_row(table_1, 3);
 
   const exists = await path_exists(path.resolve(table_1_path, '3/'));
 
   expect(exists).toBe(false);
 });
 
-test(`sketchDB.filter return rows containing a given key-value pair`, async () => {
-  const retrieved_row = await sketchDB.filter(table_2, "group", "2");
+test(`sketchdb.filter return rows containing a given key-value pair`, async () => {
+  const retrieved_row = await sketchdb.filter(table_2, "group", "2");
 
   expect(retrieved_row).toEqual([data_5, data_6]);
 });
 
 
-test(`sketchDB.delete_table deletes a table's directories/files`, async () => {
-  await sketchDB.delete_table(table_1);
+test(`sketchdb.delete_table deletes a table's directories/files`, async () => {
+  await sketchdb.delete_table(table_1);
 
   const exists = await path_exists(table_1_path);
 

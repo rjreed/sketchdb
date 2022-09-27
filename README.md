@@ -1,4 +1,4 @@
-# sketchDB
+# sketchdb
 
 ### About
 This is a small file/directory based CRUD app for Node JS that provides some basic database functionality for storing key-value pairs.
@@ -27,14 +27,14 @@ run
 npm exec sketchdb-setup
 ```
 
-from the top level of your project directory to setup an instance of sketchDB. 
+from the top level of your project directory to setup an instance of sketchdb. 
 
-The setup application will create a new directory in that top level directory of the project called "sketchDB_store" where data will be stored.
+The setup application will create a new directory in that top level directory of the project called "sketchdb_store" where data will be stored.
 
 
 ### API
 
-All function calls to sketchDB return a Promise. 
+All function calls to sketchdb return a Promise. 
 
 Calls to retrieve data will resolve to that data or reject with an error. 
 
@@ -44,22 +44,22 @@ Calls to write data or perform a delete operation will resolve with true on succ
 ### Methods
 
 
-- [sketchDB.create_table](#create_table)
-- [sketchDB.insert](#insert)
-- [sketchDB.get_row](#get_row)
-- [sketchDB.get_all](#get_all)
-- [sketchDB.update](#update)
-- [sketchDB.delete_row](#delete_row)
-- [sketchDB.delete_table](#delete_table)
-- [sketchDB.filter](#filter)
+- [sketchdb.create_table](#create_table)
+- [sketchdb.insert](#insert)
+- [sketchdb.get_row](#get_row)
+- [sketchdb.get_all](#get_all)
+- [sketchdb.update](#update)
+- [sketchdb.delete_row](#delete_row)
+- [sketchdb.delete_table](#delete_table)
+- [sketchdb.filter](#filter)
 
 
-### <a name="create_table"></a> sketchDB.create_table
+### <a name="create_table"></a> sketchdb.create_table
 Creates a new table in the database.
 
 **Syntax:** 
 ```javascript
-sketchDB.create_table( 'table_name' )
+sketchdb.create_table( 'table_name' )
 ```
 
 **Parameters:** table_name: The name of the table to create (as a string)
@@ -68,7 +68,7 @@ sketchDB.create_table( 'table_name' )
 
 **Example usage:** 
 ```javascript
-sketchDB.create_table('users')
+sketchdb.create_table('users')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -78,12 +78,12 @@ sketchDB.create_table('users')
   });
 ```
 
-### <a name="insert"></a> sketchDB.insert
+### <a name="insert"></a> sketchdb.insert
 Inserts a new row into a given table in the database.
 
 **Syntax:** 
 ```javascript
-sketchDB.insert( id, table_name, data )
+sketchdb.insert( id, table_name, data )
 ```
 
 **Parameters:** 
@@ -105,7 +105,7 @@ const unique_id = 'uq13g564d'
 
 const stringified = JSON.stringify(user_1)
 
-sketchDB.insert('users', unique_id, stringified);
+sketchdb.insert('users', unique_id, stringified);
     .then(function(results, error) {
         if (error) {
             //// handle the error
@@ -115,12 +115,12 @@ sketchDB.insert('users', unique_id, stringified);
   });
 ```
 
-### <a name="get_row"></a> sketchDB.get_row
+### <a name="get_row"></a> sketchdb.get_row
 Retrieves a row from a given table.
 
 **Syntax:** 
 ```javascript
-sketchDB.get_row( table_name, id )
+sketchdb.get_row( table_name, id )
 ```
 
 **Parameters:** 
@@ -132,7 +132,7 @@ id: a string containing the id for the row to retrieve.
 
 **Example usage:** 
 ```javascript
-sketchDB.get_row('users', '178')
+sketchdb.get_row('users', '178')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -143,12 +143,12 @@ sketchDB.get_row('users', '178')
 ```
 
 
-### <a name="get_all"></a> sketchDB.get_all
+### <a name="get_all"></a> sketchdb.get_all
 Retrieves all rows from a given table as an array of objects.
 
 **Syntax:** 
 ```javascript
-sketchDB.get_all( table_name )
+sketchdb.get_all( table_name )
 ```
 
 **Parameters:** 
@@ -158,7 +158,7 @@ table_name: The name of the table.
 
 **Example usage:** 
 ```javascript
-sketchDB.get_all('users')
+sketchdb.get_all('users')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -169,13 +169,13 @@ sketchDB.get_all('users')
   });
 ```
 
-### <a name="update"></a> sketchDB.update
+### <a name="update"></a> sketchdb.update
 Updates a row with new and/or replacement data as key-value pairs of an object. 
 
 
 **Syntax:** 
 ```javascript
-sketchDB.update( id, table_name, data )
+sketchdb.update( id, table_name, data )
 ```
 
 **Parameters:** 
@@ -203,7 +203,7 @@ const new_data = {
 }
 const unique_id = 'uq13g564d'
 
-sketchDB.update("users", unique_id, new_data);
+sketchdb.update("users", unique_id, new_data);
     .then(function(results, error) {
         if (error) {
             //// handle the error
@@ -221,12 +221,12 @@ sketchDB.update("users", unique_id, new_data);
 ```
 
 
-### <a name="delete_row"></a> sketchDB.delete_row
+### <a name="delete_row"></a> sketchdb.delete_row
 Deletes a row from a given table.
 
 **Syntax:** 
 ```javascript
-sketchDB.delete_row( table_name, id )
+sketchdb.delete_row( table_name, id )
 ```
 
 **Parameters:** 
@@ -242,7 +242,7 @@ id: a string containing the id for the row to delete.
 
 **Example usage:** 
 ```javascript
-sketchDB.delete_row('users', '178')
+sketchdb.delete_row('users', '178')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -252,12 +252,12 @@ sketchDB.delete_row('users', '178')
   });
 ```
 
-### <a name="delete_table"></a> sketchDB.delete_table
+### <a name="delete_table"></a> sketchdb.delete_table
 Deletes a table and all contents (rows).
 
 **Syntax:** 
 ```javascript
-sketchDB.delete_table( table_name )
+sketchdb.delete_table( table_name )
 ```
 
 **Parameters:** 
@@ -270,7 +270,7 @@ table_name: The name of the table as a string.
 
 **Example usage:** 
 ```javascript
-sketchDB.delete_table('students')
+sketchdb.delete_table('students')
   .then(function(result, error) {
     if (error) {
       //// handle the error
@@ -280,13 +280,13 @@ sketchDB.delete_table('students')
   });
 ```
 
-### <a name="filter"></a> sketchDB.filter
+### <a name="filter"></a> sketchdb.filter
 Updates a row with new and/or replacement data as key-value pairs of an object. 
 
 
 **Syntax:** 
 ```javascript
-sketchDB.update( id, table_name, data )
+sketchdb.update( id, table_name, data )
 ```
 
 **Parameters:** 
@@ -314,7 +314,7 @@ const new_data = {
 }
 const unique_id = 'uq13g564d'
 
-sketchDB.update("users", unique_id, new_data);
+sketchdb.update("users", unique_id, new_data);
     .then(function(results, error) {
         if (error) {
             //// handle the error

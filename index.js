@@ -20,16 +20,16 @@ if (process.env.NODE_ENV === 'test') {
   store_directory = path.join(__dirname, 'tests/fixtures/');
 }
 else {
-  store_directory = path.join(process.cwd(), 'sketchDB_store/');
+  store_directory = path.join(process.cwd(), 'sketchdb_store/');
 }
 
-//// init sketchDB object for export
-const sketchDB = {};
+//// init sketchdb object for export
+const sketchdb = {};
 
-sketchDB._store = store_directory;
+sketchdb._store = store_directory;
 
 //// function to insert a new row into a table
-sketchDB.insert = function(table, id, data) {
+sketchdb.insert = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     //// path to the item/file to be written
@@ -53,7 +53,7 @@ sketchDB.insert = function(table, id, data) {
 
 
 //// function to update a row
-sketchDB.update = function(table, id, data) {
+sketchdb.update = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
@@ -81,7 +81,7 @@ sketchDB.update = function(table, id, data) {
 };
 
 //// function to return a row/entry from a table using the row's id
-sketchDB.get_row = function(table, id) {
+sketchdb.get_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
@@ -96,7 +96,7 @@ sketchDB.get_row = function(table, id) {
 };
 
 //// function to create a new table
-sketchDB.create_table = function(table) {
+sketchdb.create_table = function(table) {
 
   return new Promise(async function(resolve, reject) {
     //// path to the item/file to be written
@@ -114,7 +114,7 @@ sketchDB.create_table = function(table) {
 };
 
 //// function to return a list of all tables in the database
-sketchDB.list_tables = function() {
+sketchdb.list_tables = function() {
 
   return new Promise(async function(resolve, reject) {
     ////path to the table folder
@@ -132,7 +132,7 @@ sketchDB.list_tables = function() {
 };
 
 //// function to return all rows/entries for a given table
-sketchDB.get_all = function(table) {
+sketchdb.get_all = function(table) {
 
   return new Promise(async function(resolve, reject) {
     ////path to the table folder
@@ -168,10 +168,10 @@ sketchDB.get_all = function(table) {
 
 //// function to return all rows in a table in which include a given key/value pair
 //// TODO: make this more robust
-sketchDB.filter = function(table, key, value) {
+sketchdb.filter = function(table, key, value) {
 
   return new Promise(async function(resolve, reject) {
-    const array = await sketchDB.get_all(table).catch(error => {
+    const array = await sketchdb.get_all(table).catch(error => {
       reject(error);
     });
 
@@ -189,7 +189,7 @@ sketchDB.filter = function(table, key, value) {
 };
 
 //// function to delete a row in a table
-sketchDB.delete_row = function(table, id) {
+sketchdb.delete_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
 
@@ -211,7 +211,7 @@ sketchDB.delete_row = function(table, id) {
 
 
 //// function to delete a row in a table
-sketchDB.delete_table = function(table) {
+sketchdb.delete_table = function(table) {
 
   return new Promise(async function(resolve, reject) {
 
@@ -231,4 +231,4 @@ sketchDB.delete_table = function(table) {
 
 
 // EXPORTS
-module.exports = sketchDB;
+module.exports = sketchdb;

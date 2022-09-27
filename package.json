@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rjreed/sketchDB"
+    "url": "git://github.com/rjreed/sketchdb"
   },
   "bin": {
     "sketchdb-setup": "./setup.js"
