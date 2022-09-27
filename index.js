@@ -41,11 +41,12 @@ carDB.insert = function(table, id, data) {
     //// make the folder 
 
     //// write the stringified data to a json file in the folder
-    await fsp.writeFile(row_path, stringified, { flag: "wx" }).then(() => {
-      resolve(true);
-    }).catch(error => {
-      reject(error);
-    });
+    await fsp.writeFile(row_path, stringified, { flag: "wx" })
+      .then(() => {
+        resolve(true);
+      }).catch(error => {
+        reject(error);
+      });
 
   });
 };
@@ -145,12 +146,15 @@ carDB.get_all = function(table) {
         let data = [];
 
         //// push all the parsed data from the files into the 'data' array
-        await Promise.all(files.map(async (file) => {
+        const build_data = files.map(async (file) => {
           const row_path = path.join(table_path, file);
           const contents = await fsp.readFile(row_path, 'utf8');
 
           data.push(JSON.parse(contents));
-        }));
+        })
+
+
+        await Promise.all(build_data);
 
         //// return the data array
         resolve(data);
@@ -193,20 +197,15 @@ carDB.delete_row = function(table, id) {
     const row_path = path.join(store_directory, 'tables/', table + '/', id + '.json');
 
     //// test that the path exists with access, throw err if it doesn't
-    fsp.access(row_path).then(async function(err) {
-      if (err) {
-        console.log(err);
-        reject(err);
-      }
-      else {
 
-        //// unlink/delete the json file for the row
-        await fsp.unlink(path.join(row_path));
 
-        resolve(true);
+    //// unlink/delete the json file for the row
+    fsp.unlink(path.join(row_path))
+      .then(() => resolve(true))
+      .catch(error => {
+        reject(error);
+      });
 
-      }
-    });
   });
 };
 
@@ -219,10 +218,12 @@ carDB.delete_table = function(table) {
     //// path to the row to be deleted
     const table_path = path.join(store_directory, 'tables/', table + '/')
 
-    fsp.rm(table_path, { recursive: true, force: true }).then(() =>
-      resolve(true)).catch(error => {
-      reject(error);
-    })
+    fsp.rm(table_path, { recursive: true, force: true })
+      .then(() =>
+        resolve(true))
+      .catch(error => {
+        reject(error);
+      })
 
 
   });

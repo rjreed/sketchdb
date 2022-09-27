@@ -11,6 +11,7 @@ const path = require('path');
 
 /// app/local libs
 const carDB = require('../index.js');
+const utils = require('../utils.js')
 
 
 // APP
@@ -29,11 +30,7 @@ const table_2_path = path.join(tables_path, table_2);
 const table_3_path = path.join(tables_path, table_3);
 
 
-const path_exists = async function(path) {
-  return fsp.access(path)
-    .then( true)
-    .catch(() => false);
-};
+const path_exists = utils.path_exists;
 
 /// Data fixtures 
 //// TODO move this out and rename/ reorganize
@@ -148,8 +145,6 @@ test(`carDB.insert rejects if given a duplicate row id`, async () => {
 
   expect(insert_call).rejects.toThrow();
 });
-
-
 
 
 test(`carDB.update modifies a key value pair in a row`, async () => {

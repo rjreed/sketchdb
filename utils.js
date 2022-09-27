@@ -27,5 +27,11 @@ utils.delete_directory = function(path) {
   });
 };
 
+utils.path_exists = function(path) {
+  return fsp.access(path)
+    .then( true)
+    .catch(() => false);
+};
+
 
 module.exports = utils;
