@@ -1,4 +1,4 @@
-# carDB
+# sketchDB
 
 ### About
 This is a small file/directory based CRUD app for Node JS that provides some basic database functionality for storing key-value pairs.
@@ -13,7 +13,7 @@ The purpose of this library is to provide a simple database-like storage system 
 
 run 
 ```console
-npm install carDB
+npm install sketchdb
 ```
 
 in your project's directory to install a local node module.
@@ -24,17 +24,17 @@ in your project's directory to install a local node module.
 ### Setup
 run 
 ```console
-npm exec carDB-setup
+npm exec sketchDB-setup
 ```
 
-from the top level of your project directory to setup an instance of cardb. 
+from the top level of your project directory to setup an instance of sketchDB. 
 
-The setup application will create a new directory in that top level directory of the project called "carDB_store" where data will be stored.
+The setup application will create a new directory in that top level directory of the project called "sketchDB_store" where data will be stored.
 
 
 ### API
 
-All function calls to carDB return a Promise. 
+All function calls to sketchDB return a Promise. 
 
 Calls to retrieve data will resolve to that data or reject with an error. 
 
@@ -44,22 +44,22 @@ Calls to write data or perform a delete operation will resolve with true on succ
 ### Methods
 
 
-- [carDB.create_table](#create_table)
-- [carDB.insert](#insert)
-- [carDB.get_row](#get_row)
-- [carDB.get_all](#get_all)
-- [carDB.update](#update)
-- [carDB.delete_row](#delete_row)
-- [carDB.delete_table](#delete_table)
-- [carDB.filter](#filter)
+- [sketchDB.create_table](#create_table)
+- [sketchDB.insert](#insert)
+- [sketchDB.get_row](#get_row)
+- [sketchDB.get_all](#get_all)
+- [sketchDB.update](#update)
+- [sketchDB.delete_row](#delete_row)
+- [sketchDB.delete_table](#delete_table)
+- [sketchDB.filter](#filter)
 
 
-### <a name="create_table"></a> carDB.create_table
+### <a name="create_table"></a> sketchDB.create_table
 Creates a new table in the database.
 
 **Syntax:** 
 ```javascript
-carDB.create_table( 'table_name' )
+sketchDB.create_table( 'table_name' )
 ```
 
 **Parameters:** table_name: The name of the table to create (as a string)
@@ -68,7 +68,7 @@ carDB.create_table( 'table_name' )
 
 **Example usage:** 
 ```javascript
-carDB.create_table('users')
+sketchDB.create_table('users')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -78,12 +78,12 @@ carDB.create_table('users')
   });
 ```
 
-### <a name="insert"></a> carDB.insert
+### <a name="insert"></a> sketchDB.insert
 Inserts a new row into a given table in the database.
 
 **Syntax:** 
 ```javascript
-carDB.insert( id, table_name, data )
+sketchDB.insert( id, table_name, data )
 ```
 
 **Parameters:** 
@@ -105,7 +105,7 @@ const unique_id = 'uq13g564d'
 
 const stringified = JSON.stringify(user_1)
 
-carDB.insert('users', unique_id, stringified);
+sketchDB.insert('users', unique_id, stringified);
     .then(function(results, error) {
         if (error) {
             //// handle the error
@@ -115,12 +115,12 @@ carDB.insert('users', unique_id, stringified);
   });
 ```
 
-### <a name="get_row"></a> carDB.get_row
+### <a name="get_row"></a> sketchDB.get_row
 Retrieves a row from a given table.
 
 **Syntax:** 
 ```javascript
-carDB.get_row( table_name, id )
+sketchDB.get_row( table_name, id )
 ```
 
 **Parameters:** 
@@ -132,7 +132,7 @@ id: a string containing the id for the row to retrieve.
 
 **Example usage:** 
 ```javascript
-carDB.get_row('users', '178')
+sketchDB.get_row('users', '178')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -143,12 +143,12 @@ carDB.get_row('users', '178')
 ```
 
 
-### <a name="get_all"></a> carDB.get_all
+### <a name="get_all"></a> sketchDB.get_all
 Retrieves all rows from a given table as an array of objects.
 
 **Syntax:** 
 ```javascript
-carDB.get_all( table_name )
+sketchDB.get_all( table_name )
 ```
 
 **Parameters:** 
@@ -158,7 +158,7 @@ table_name: The name of the table.
 
 **Example usage:** 
 ```javascript
-carDB.get_all('users')
+sketchDB.get_all('users')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -169,13 +169,13 @@ carDB.get_all('users')
   });
 ```
 
-### <a name="update"></a> carDB.update
+### <a name="update"></a> sketchDB.update
 Updates a row with new and/or replacement data as key-value pairs of an object. 
 
 
 **Syntax:** 
 ```javascript
-carDB.update( id, table_name, data )
+sketchDB.update( id, table_name, data )
 ```
 
 **Parameters:** 
@@ -203,7 +203,7 @@ const new_data = {
 }
 const unique_id = 'uq13g564d'
 
-carDB.update("users", unique_id, new_data);
+sketchDB.update("users", unique_id, new_data);
     .then(function(results, error) {
         if (error) {
             //// handle the error
@@ -221,12 +221,12 @@ carDB.update("users", unique_id, new_data);
 ```
 
 
-### <a name="delete_row"></a> carDB.delete_row
+### <a name="delete_row"></a> sketchDB.delete_row
 Deletes a row from a given table.
 
 **Syntax:** 
 ```javascript
-carDB.delete_row( table_name, id )
+sketchDB.delete_row( table_name, id )
 ```
 
 **Parameters:** 
@@ -242,7 +242,7 @@ id: a string containing the id for the row to delete.
 
 **Example usage:** 
 ```javascript
-carDB.delete_row('users', '178')
+sketchDB.delete_row('users', '178')
   .then(function(results, error) {
     if (error) {
       //// handle the error
@@ -252,12 +252,12 @@ carDB.delete_row('users', '178')
   });
 ```
 
-### <a name="delete_table"></a> carDB.delete_table
+### <a name="delete_table"></a> sketchDB.delete_table
 Deletes a table and all contents (rows).
 
 **Syntax:** 
 ```javascript
-carDB.delete_table( table_name )
+sketchDB.delete_table( table_name )
 ```
 
 **Parameters:** 
@@ -270,7 +270,7 @@ table_name: The name of the table as a string.
 
 **Example usage:** 
 ```javascript
-carDB.delete_table('students')
+sketchDB.delete_table('students')
   .then(function(result, error) {
     if (error) {
       //// handle the error
@@ -280,13 +280,13 @@ carDB.delete_table('students')
   });
 ```
 
-### <a name="filter"></a> carDB.filter
+### <a name="filter"></a> sketchDB.filter
 Updates a row with new and/or replacement data as key-value pairs of an object. 
 
 
 **Syntax:** 
 ```javascript
-carDB.update( id, table_name, data )
+sketchDB.update( id, table_name, data )
 ```
 
 **Parameters:** 
@@ -314,7 +314,7 @@ const new_data = {
 }
 const unique_id = 'uq13g564d'
 
-carDB.update("users", unique_id, new_data);
+sketchDB.update("users", unique_id, new_data);
     .then(function(results, error) {
         if (error) {
             //// handle the error

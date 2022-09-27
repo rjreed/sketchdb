@@ -20,16 +20,16 @@ if (process.env.NODE_ENV === 'test') {
   store_directory = path.join(__dirname, 'tests/fixtures/');
 }
 else {
-  store_directory = path.join(process.cwd(), 'carDB_store/');
+  store_directory = path.join(process.cwd(), 'sketchDB_store/');
 }
 
-//// init carDB object for export
-const carDB = {};
+//// init sketchDB object for export
+const sketchDB = {};
 
-carDB._store = store_directory;
+sketchDB._store = store_directory;
 
 //// function to insert a new row into a table
-carDB.insert = function(table, id, data) {
+sketchDB.insert = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     //// path to the item/file to be written
@@ -53,7 +53,7 @@ carDB.insert = function(table, id, data) {
 
 
 //// function to update a row
-carDB.update = function(table, id, data) {
+sketchDB.update = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
@@ -81,7 +81,7 @@ carDB.update = function(table, id, data) {
 };
 
 //// function to return a row/entry from a table using the row's id
-carDB.get_row = function(table, id) {
+sketchDB.get_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
@@ -96,7 +96,7 @@ carDB.get_row = function(table, id) {
 };
 
 //// function to create a new table
-carDB.create_table = function(table) {
+sketchDB.create_table = function(table) {
 
   return new Promise(async function(resolve, reject) {
     //// path to the item/file to be written
@@ -114,7 +114,7 @@ carDB.create_table = function(table) {
 };
 
 //// function to return a list of all tables in the database
-carDB.list_tables = function() {
+sketchDB.list_tables = function() {
 
   return new Promise(async function(resolve, reject) {
     ////path to the table folder
@@ -132,7 +132,7 @@ carDB.list_tables = function() {
 };
 
 //// function to return all rows/entries for a given table
-carDB.get_all = function(table) {
+sketchDB.get_all = function(table) {
 
   return new Promise(async function(resolve, reject) {
     ////path to the table folder
@@ -168,10 +168,10 @@ carDB.get_all = function(table) {
 
 //// function to return all rows in a table in which include a given key/value pair
 //// TODO: make this more robust
-carDB.filter = function(table, key, value) {
+sketchDB.filter = function(table, key, value) {
 
   return new Promise(async function(resolve, reject) {
-    const array = await carDB.get_all(table).catch(error => {
+    const array = await sketchDB.get_all(table).catch(error => {
       reject(error);
     });
 
@@ -189,7 +189,7 @@ carDB.filter = function(table, key, value) {
 };
 
 //// function to delete a row in a table
-carDB.delete_row = function(table, id) {
+sketchDB.delete_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
 
@@ -211,7 +211,7 @@ carDB.delete_row = function(table, id) {
 
 
 //// function to delete a row in a table
-carDB.delete_table = function(table) {
+sketchDB.delete_table = function(table) {
 
   return new Promise(async function(resolve, reject) {
 
@@ -231,4 +231,4 @@ carDB.delete_table = function(table) {
 
 
 // EXPORTS
-module.exports = carDB;
+module.exports = sketchDB;

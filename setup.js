@@ -7,13 +7,13 @@ const fsp = require('fs').promises;
 const path = require('path');
 
 /// app/local libs
-const carDB = require('./index.js');
+const sketchDB = require('./index.js');
 
 
 // APP 
 
 //// name for database storage directory
-const directory_name = 'carDB_store'
+const directory_name = 'sketchDB_store'
 
 //// function to setup necessary directories for database storage
 function setup() {

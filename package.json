@@ -1,24 +1,22 @@
 {
-  "name": "carDB",
+  "name": "sketchdb",
   "version": "0.1.0",
-  "description": "A simple directory/file based database app",
+  "description": "A simple directory/file based database app.",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rjreed/carDB"
+    "url": "git://github.com/rjreed/sketchDB"
   },
   "bin": {
-    "carDB-setup": "./setup.js"
+    "sketchDB-setup": "./setup.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["database", "db"],
+  "author": "Rocky Reed",
+  "license": "0BSD",
   "devDependencies": {
-    "fs-extra": "^10.1.0",
-    "jest": "^27.5.1",
-    "rimraf": "^3.0.2"
+    "jest": "^27.5.1"
   }
 }
