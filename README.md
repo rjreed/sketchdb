@@ -54,7 +54,7 @@ Calls to write data or perform a delete operation will resolve with true on succ
 - [sketchdb.filter](#filter)
 
 ### <a name="list_tables"></a> sketchdb.list_tables
-Inserts a new row into a given table in the database.
+List the tables in the database in array format.
 
 **Syntax:** 
 ```javascript
@@ -65,7 +65,7 @@ sketchdb.list_tables()
 
 none
 
-**Return value:** Returns a Promise. When resolved, Promise returns 
+**Return value:** Returns a Promise. When resolved, Promise returns an array of the table names as strings.
 
 **Example usage:** 
 
