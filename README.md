@@ -24,7 +24,7 @@ in your project's directory to install a local node module.
 ### Setup
 run 
 ```console
-npm exec sketchDB-setup
+npm exec sketchdb-setup
 ```
 
 from the top level of your project directory to setup an instance of sketchDB. 

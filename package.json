@@ -11,7 +11,7 @@
     "url": "git://github.com/rjreed/sketchDB"
   },
   "bin": {
-    "sketchDB-setup": "./setup.js"
+    "sketchdb-setup": "./setup.js"
   },
   "keywords": ["database", "db"],
   "author": "Rocky Reed",
