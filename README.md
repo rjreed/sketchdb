@@ -5,9 +5,9 @@ This is a small file/directory based CRUD app for Node JS that provides some bas
 
 The purpose of this library is to provide a simple database-like storage system for things like small personal projects. It is written to be easy to setup and use.
 
+This library requires no dependencies, and Jest is the only dev dependency.
 
 *Note: This library is currently in a Zero-version and the API may change.* 
-
 
 ### Installation
 
@@ -29,7 +29,7 @@ npm exec sketchdb-setup
 
 from the top level of your project directory to setup an instance of sketchdb. 
 
-The setup application will create a new directory in that top level directory of the project called "sketchdb_store" where data will be stored.
+The setup application will create a new directory in that top level directory of the project named "sketchdb_store" where data will be stored, along with a subdirectory named "tables". (that's all sketchdb-setup does)
 
 
 ### API
@@ -358,4 +358,3 @@ sketchdb.filter('users', 'group', 'superuser');
    */
   });
 ```
-
