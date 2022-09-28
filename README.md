@@ -95,9 +95,9 @@ sketchdb.create_table( 'table_name' )
 
 **Parameters:** 
 
-table_name: The name of the table to create (as a string)
+*table_name:* The name of the table to create (as a string)
 
-**Return value:** Returns a Promise. When resolved, Promise returns 
+**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
 
 **Example usage:** 
 ```javascript
@@ -121,11 +121,11 @@ sketchdb.insert( id, table_name, data )
 
 **Parameters:** 
 
-id: a string containing the id for the row. Must be unique to the table and valid as a directory name.
+*id:* a string containing the id for the row. Must be unique to the table and valid as a directory name.
 
-table_name: The name of the table to insert the row into. Table must already exist.
+*table_name:* The name of the table to insert the row into. Table must already exist.
 
-data: The data to be inserted. Will be written as a json file. Can be a JS object or valid JSON string.
+*data:* The data to be inserted. Will be written as a json file. Can be a JS object or valid JSON string.
 
 **Return value:** Returns a Promise. When resolved, Promise returns 
 
@@ -161,9 +161,9 @@ sketchdb.get_row( table_name, id )
 
 **Parameters:** 
 
-table_name: The name of the table the row belongs to.
+*table_name:* The name of the table the row belongs to.
 
-id: a string containing the id for the row to retrieve. 
+*id:* a string containing the id for the row to retrieve. 
 
 
 **Return value:** Returns a Promise. When resolved, Promise returns 
@@ -191,9 +191,9 @@ sketchdb.get_all( table_name )
 
 **Parameters:** 
 
-table_name: The name of the table.
+*table_name:* The name of the table.
 
-**Return value:** Returns a Promise. When resolved, Promise returns 
+**Return value:** Returns a Promise. When resolved, Promise returns an array of objects (the data from each row). On rejection, Promise returns the error.
 
 **Example usage:** 
 ```javascript
@@ -225,7 +225,7 @@ sketchdb.update( id, table_name, data )
 
 *data:* The data to be used to update the row. 
 
-**Return value:** Returns a Promise.  When resolved, Promise returns 
+**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
 
 **Example usage:** 
 
@@ -267,12 +267,12 @@ sketchdb.delete_row( table_name, id )
 
 **Parameters:** 
 
-table_name: The name of the table the row belongs to.
+*table_name:* The name of the table the row belongs to.
 
-id: a string containing the id for the row to delete. 
+*id:* a string containing the id for the row to delete. 
 
 
-**Return value:** Returns a Promise. When resolved, Promise returns 
+**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
 
 **Example usage:** 
 ```javascript
@@ -298,10 +298,7 @@ sketchdb.delete_table( table_name )
 
 table_name: The name of the table as a string.
 
-**Return value:** Returns a Promise. When resolved, Promise returns true.
-
-```
-
+**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
 
 **Example usage:** 
 ```javascript
@@ -316,25 +313,25 @@ sketchdb.delete_table('students')
 ```
 
 ### <a name="filter"></a> sketchdb.filter
-Updates a row with new and/or replacement data as key-value pairs of an object. 
+Return an array of any rows in a table that include a given key/value pair
 
 
 **Syntax:** 
 ```javascript
-sketchdb.update( id, table_name, data )
+sketchdb.filter( table_name, key, value )
 ```
 
 **Parameters:** 
 
-***id:*** a string containing the id for the row. Must be unique to the table and valid as a directory name.
+*table_name:* The name of the table the row belongs to.
 
-***table_name:*** The name of the table the row belongs to.
+*key:* The key (as a string) to be used to filter the rows by { *key* : value } 
 
-***data:*** The data to be used to update the row. 
+*value:* The value (as a string) to be used to filter the rows by { key : *value* } 
 
 **Return value:** Returns a Promise.  When resolved, Promise returns 
 
-**Example usage:** 
+*Example usage:* 
 
 ```javascript
 const user_1 = {
@@ -346,20 +343,19 @@ const new_data = {
 }
 const unique_id = 'uq13g564d'
 
-sketchdb.update("users", unique_id, new_data);
+sketchdb.filter('users', 'group', 'superuser');
     .then(function(results, error) {
         if (error) {
             //// handle the error
         }
-        
-        /* the updated row's object will look like :
-        {
-            'name':'Bobby Knuckles',
-            'group': '2'
-         }
-       */
-    
-    success_function(results);
+       
+       do_something_with_results();
+       
+       /*
+       results will look like:
+       [{ 'username': 'user_1','group': 'superuser' }, {'username': 'user_3','group': 'superuser'}]
+   
+   */
   });
 ```
 
