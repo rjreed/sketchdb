@@ -12,9 +12,8 @@ const utils = require('./utils');
 
 // APP
 
-//// define paths for application
+//// define path for storage
 let store_directory;
-//// make application base directory  global
 
 if (process.env.NODE_ENV === 'test') {
   store_directory = path.join(__dirname, 'tests/fixtures/');
@@ -26,6 +25,7 @@ else {
 //// init sketchdb object for export
 const sketchdb = {};
 
+//// internal reference for store_directory path
 sketchdb._store = store_directory;
 
 //// function to insert a new row into a table
@@ -37,8 +37,6 @@ sketchdb.insert = function(table, id, data) {
 
     //// stringify the data
     const stringified = JSON.stringify(data);
-
-    //// make the folder 
 
     //// write the stringified data to a json file in the folder
     await fsp.writeFile(row_path, stringified, { flag: "wx" })
@@ -57,10 +55,14 @@ sketchdb.update = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
+    
     const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
       reject(error);
     });
+ 
     const new_object = JSON.parse(raw);
+    
+    //// extract the keys to use in the for of loop
     const keys = Object.keys(data);
 
     //// TODO options overwrite or something
@@ -85,9 +87,11 @@ sketchdb.get_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
+    
     const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
       reject(error);
     });
+    
     const new_object = JSON.parse(raw);
 
     resolve(new_object);
@@ -148,6 +152,7 @@ sketchdb.get_all = function(table) {
         //// push all the parsed data from the files into the 'data' array
         const build_data = files.map(async (file) => {
           const row_path = path.join(table_path, file);
+          
           const contents = await fsp.readFile(row_path, 'utf8');
 
           data.push(JSON.parse(contents));
