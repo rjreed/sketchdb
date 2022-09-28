@@ -55,13 +55,13 @@ sketchdb.update = function(table, id, data) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
-    
+
     const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
       reject(error);
     });
- 
+
     const new_object = JSON.parse(raw);
-    
+
     //// extract the keys to use in the for of loop
     const keys = Object.keys(data);
 
@@ -87,11 +87,11 @@ sketchdb.get_row = function(table, id) {
 
   return new Promise(async function(resolve, reject) {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
-    
+
     const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
       reject(error);
     });
-    
+
     const new_object = JSON.parse(raw);
 
     resolve(new_object);
@@ -152,9 +152,10 @@ sketchdb.get_all = function(table) {
         //// push all the parsed data from the files into the 'data' array
         const build_data = files.map(async (file) => {
           const row_path = path.join(table_path, file);
-          
+
           const contents = await fsp.readFile(row_path, 'utf8');
 
+          //// push the object to the data array
           data.push(JSON.parse(contents));
         })
 
@@ -180,6 +181,7 @@ sketchdb.filter = function(table, key, value) {
       reject(error);
     });
 
+    //// filter the items based on the provided key/value pair
     const filtered = array.filter(function(item, index) {
       if (item[key] === value) {
         return true;
@@ -223,6 +225,7 @@ sketchdb.delete_table = function(table) {
     //// path to the row to be deleted
     const table_path = path.join(store_directory, 'tables/', table + '/')
 
+    //// delete the directory and contents
     fsp.rm(table_path, { recursive: true, force: true })
       .then(() =>
         resolve(true))
