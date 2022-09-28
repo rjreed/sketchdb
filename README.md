@@ -111,6 +111,9 @@ sketchdb.create_table('users')
   });
 ```
 
+**Note:** If you want to add tables to a project without writing functions to do so, you can create a subdirectory in "./sketchdb_store/tables/" with the name of the table you want to create. 
+For example, making "./sketchdb_store/tables/users/" will create a "users" table in the schema.
+
 ### <a name="insert"></a> sketchdb.insert
 Inserts a new row into a given table in the database.
 
