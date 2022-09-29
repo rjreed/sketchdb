@@ -71,18 +71,19 @@ none
 
 ```javascript
 
-sketchdb.list_tables();
+sketchdb.list_tables()
     .then(function(results, error) {
         if (error) {
             //// handle the error
         }
-  do_something_with_results();
-  
-  /*
-  Results will be an array of the table names such as ["users","posts","authors"]
-  */
-   
-  });
+
+        do_something_with_results();
+        
+        /*
+        Results will be an array of the table names such as ["users","posts","authors"]
+        */
+
+    });
 ```
 
 ### <a name="create_table"></a> sketchdb.create_table
@@ -102,13 +103,13 @@ sketchdb.create_table( 'table_name' )
 **Example usage:** 
 ```javascript
 sketchdb.create_table('users')
-  .then(function(results, error) {
-    if (error) {
-      //// handle the error
-    }
-    
-    success_function(results);
-  });
+    .then(function(results, error) {
+        if (error) {
+            //// handle the error
+        }
+
+        success_function(results);
+    });
 ```
 
 **Note:** If you want to add tables to a project without writing functions to do so, you can create a subdirectory in "./sketchdb_store/tables/" with the name of the table you want to create. 
@@ -136,22 +137,23 @@ sketchdb.insert( id, table_name, data )
 
 ```javascript
 const user_1 = {
-    'name':'Bobby Knuckles',
+    'name': 'Bobby Knuckles',
     'group': '1"
 }
 
-const unique_id = 'uq13g564d'
+const unique_id = 'uq13g564d';
 
-const stringified = JSON.stringify(user_1)
+const stringified = JSON.stringify(user_1);
 
 sketchdb.insert('users', unique_id, stringified);
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-    
+.then(function(results, error) {
+    if (error) {
+        //// handle the error
+    }
+
     success_function(results);
-  });
+});
+
 ```
 
 ### <a name="get_row"></a> sketchdb.get_row
@@ -174,13 +176,14 @@ sketchdb.get_row( table_name, id )
 **Example usage:** 
 ```javascript
 sketchdb.get_row('users', '178')
-  .then(function(results, error) {
-    if (error) {
-      //// handle the error
-    }
-    
-    success_function(results);
-  });
+    .then(function(results, error) {
+        if (error) {
+            //// handle the error
+        }
+
+        success_function(results);
+    });
+
 ```
 
 
@@ -201,14 +204,14 @@ sketchdb.get_all( table_name )
 **Example usage:** 
 ```javascript
 sketchdb.get_all('users')
-  .then(function(results, error) {
-    if (error) {
-      //// handle the error
-    }
-    
-    //// results will be an array of the row objects
-    success_function(results);
-  });
+    .then(function(results, error) {
+        if (error) {
+            //// handle the error
+        }
+
+        //// results will be an array of the row objects
+        success_function(results);
+    })
 ```
 
 ### <a name="update"></a> sketchdb.update
@@ -234,29 +237,30 @@ sketchdb.update( id, table_name, data )
 
 ```javascript
 const user_1 = {
-    'name':'Bobby Knuckles',
+    'name': 'Bobby Knuckles',
     'group': '1'
 }
 const new_data = {
     'group': '2'
 }
-const unique_id = 'uq13g564d'
+const unique_id = 'uq13g564d';
 
 sketchdb.update("users", unique_id, new_data);
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-        
-        /* the updated row's object will look like :
+.then(function(results, error) {
+    if (error) {
+        //// handle the error
+    }
+
+    /* the updated row's object will look like :
         {
             'name':'Bobby Knuckles',
             'group': '2'
          }
        */
-    
+
     success_function(results);
-  });
+});
+
 ```
 
 
@@ -284,9 +288,10 @@ sketchdb.delete_row('users', '178')
     if (error) {
       //// handle the error
     }
-    
+
     success_function(results);
-  });
+  })
+
 ```
 
 ### <a name="delete_table"></a> sketchdb.delete_table
@@ -310,7 +315,7 @@ sketchdb.delete_table('students')
     if (error) {
       //// handle the error
     }
-    
+
     success_function();
   });
 ```
@@ -337,27 +342,18 @@ sketchdb.filter( table_name, key, value )
 *Example usage:* 
 
 ```javascript
-const user_1 = {
-    'name':'Bobby Knuckles',
-    'group': '1'
-}
-const new_data = {
-    'group': '2'
-}
-const unique_id = 'uq13g564d'
-
 sketchdb.filter('users', 'group', 'superuser');
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-       
-       do_something_with_results();
-       
-       /*
-       results will look like:
+.then(function(results, error) {
+  if (error) {
+    //// handle the error
+  }
+
+  do_something_with_results();
+
+  /*
+       results will look something like:
        [{ 'username': 'user_1','group': 'superuser' }, {'username': 'user_3','group': 'superuser'}]
    
    */
-  });
+});
 ```

@@ -177,6 +177,8 @@ sketchdb.get_all = function(table) {
 sketchdb.filter = function(table, key, value) {
 
   return new Promise(async function(resolve, reject) {
+    
+    //// retrieve all rows in the given table using get_all
     const array = await sketchdb.get_all(table).catch(error => {
       reject(error);
     });
