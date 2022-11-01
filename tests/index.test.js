@@ -10,8 +10,8 @@ const path = require('path');
 /// vendor libs
 
 /// app/local libs
-const sketchdb = require('../index.js');
-const utils = require('../utils.js')
+const sketchdb = require('../src/index.js');
+const utils = require('../src/utils.js')
 
 
 // APP
@@ -99,7 +99,7 @@ const data_7 = [data_4, data_5, data_6];
 
 test(`Test environment variables are setup`, () => {
   expect(process.env.NODE_ENV).toBe('test');
-  
+
   expect(sketchdb._store).toBe(fixtures_path);
 });
 
@@ -218,6 +218,6 @@ afterAll(() => {
 //// copy the static fixtures over to the tables path
 afterAll(async () => {
 
-  return fsp.cp(static_path, tables_path, { recursive: true })
+  return fsp.cp(static_path, tables_path, { recursive: true });
 
 });

@@ -7,13 +7,11 @@ const fsp = require('fs').promises;
 const path = require('path');
 
 /// app/local libs
-const sketchdb = require('./index.js');
-
 
 // APP 
 
 //// name for database storage directory
-const directory_name = 'sketchdb_store'
+const directory_name = 'sketchdb_store';
 
 //// function to setup necessary directories for database storage
 function setup() {
@@ -41,9 +39,9 @@ function setup() {
 
         //// resolve when completed
         resolve();
-      })
-    })
-  })
+      });
+    });
+  });
 }
 
 //// call setup function
