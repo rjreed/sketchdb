@@ -23,13 +23,13 @@ utils.delete_directory = function(path) {
     fsp.rm(path, { recursive: true, force: true }).then(() =>
       resolve()).catch(error => {
       reject(error);
-    })
+    });
   });
 };
 
 utils.path_exists = function(path) {
   return fsp.access(path)
-    .then( true)
+    .then(true)
     .catch(() => false);
 };
 

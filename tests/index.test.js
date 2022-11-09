@@ -206,6 +206,7 @@ test(`sketchdb.delete_table deletes a table's directories/files`, async () => {
 
 
 
+
 /// Teardown and Setup
 
 //// delete all the test fixtures
