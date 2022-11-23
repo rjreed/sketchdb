@@ -52,6 +52,7 @@ Calls to write data or perform a delete operation will resolve with true on succ
 - [sketchdb.delete_row](#delete_row)
 - [sketchdb.delete_table](#delete_table)
 - [sketchdb.filter](#filter)
+- [sketchdb.rename_table](#rename_table)
 
 ### <a name="list_tables"></a> sketchdb.list_tables
 List the tables in the database in array format.
@@ -356,4 +357,32 @@ sketchdb.filter('users', 'group', 'superuser');
    
    */
 });
+```
+
+
+### <a name="rename_table"></a> sketchdb.rename_table
+Renames a table
+
+**Syntax:** 
+```javascript
+sketchdb.rename_table( table, new_name )
+```
+
+**Parameters:** 
+
+table: The name of the (old) table to be renamed (as a string).
+new_name: The new name for the table (as a string).
+
+**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
+
+**Example usage:** 
+```javascript
+sketchdb.rename_table('authors', 'contributors')
+  .then(function(result, error) {
+    if (error) {
+      //// handle the error
+    }
+
+    success_function();
+  });
 ```

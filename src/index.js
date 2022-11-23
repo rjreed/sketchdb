@@ -252,6 +252,26 @@ sketchdb.eq_join = function(table_1, table_2, key) {
   });
 };
 
+// function to rename a table
+sketchdb.rename_table = function(table, new_name) {
+
+  return new Promise(async (resolve, reject) => {
+
+    //// paths to old table and new table 
+    const old_path = path.join(store_directory, 'tables/', table + '/');
+    const new_path = path.join(store_directory, 'tables/', new_name + '/');
+
+    //// call fsp.rename with paths
+    fsp.rename(old_path, new_path)
+      .then(() =>
+        resolve(true))
+      .catch(error => {
+        reject(error);
+      });
+
+  });
+
+};
 
 // EXPORTS
 module.exports = sketchdb;

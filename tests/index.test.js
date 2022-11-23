@@ -204,6 +204,13 @@ test(`sketchdb.delete_table deletes a table's directories/files`, async () => {
   expect(exists).toBe(false);
 });
 
+test(`sketchdb.rename_table renames a table directory`, async () => {
+  await sketchdb.rename_table(table_2, 'renamed');
+
+  const exists = await path_exists(path.join(tables_path, 'renamed'));
+
+  expect(exists).toBe(true);
+});
 
 
 

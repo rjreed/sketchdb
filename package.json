@@ -1,6 +1,6 @@
 {
   "name": "sketchdb",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "A simple directory/file based database app.",
   "main": "index.js",
   "scripts": {
