@@ -13,24 +13,73 @@ const fsp = require('fs').promises;
 //// define path for storage
 let store_directory;
 
+//// name for database storage directory
+const directory_name = 'sketchdb_store';
+
 //// use tests/fixtures path when testing
 if (process.env.NODE_ENV === 'test') {
   store_directory = path.join(__dirname, '/../tests/fixtures/');
 }
 else {
-  store_directory = path.join(process.cwd(), 'sketchdb_store/');
+  store_directory = path.join(process.cwd(), directory_name);
 }
 
 //// init sketchdb object for export
 const sketchdb = {};
 
 //// internal reference for store_directory path
-sketchdb._store = store_directory;
+sketchdb._set_path = function() {
+  if (process.env.NODE_ENV === 'test') {
+    store_directory = path.join(__dirname, '/../tests/fixtures/');
+  }
+  else {
+    store_directory = path.join(process.cwd(), directory_name);
+  }
+
+  return store_directory;
+};
+
+//// function to setup necessary directories for database storage
+sketchdb.setup = function() {
+
+  sketchdb._set_path();
+
+  return new Promise(async function(resolve, reject) {
+
+    //// path used to create the database storage directory
+    const directory = path.resolve(store_directory);
+    const tables_directory = path.resolve(store_directory, 'tables/');
+
+    //// create the database directory
+    fsp.mkdir(directory).then(function(error) {
+
+      if (error) {
+        reject(error);
+      }
+
+      //// create the tables directory
+      fsp.mkdir(tables_directory).then(function(error) {
+
+        //// does this count as error handling
+        if (error) {
+          reject(error);
+        }
+
+        //// resolve when completed
+        resolve();
+      });
+    });
+  });
+}
+
 
 //// function to insert a new row into a table
 sketchdb.insert = function(table, id, data) {
 
+  sketchdb._set_path();
+
   return new Promise(async (resolve, reject) => {
+
     //// path to the item/file to be written
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
 
@@ -52,7 +101,10 @@ sketchdb.insert = function(table, id, data) {
 //// function to update a row
 sketchdb.update = function(table, id, data) {
 
+  sketchdb._set_path();
+
   return new Promise(async (resolve, reject) => {
+
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
 
     const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
@@ -84,6 +136,8 @@ sketchdb.update = function(table, id, data) {
 //// function to return a row/entry from a table using the row's id
 sketchdb.get_row = function(table, id) {
 
+  sketchdb._set_path();
+
   return new Promise(async (resolve, reject) => {
     const row_path = path.join(store_directory, 'tables/', table, id + '.json');
 
@@ -100,6 +154,8 @@ sketchdb.get_row = function(table, id) {
 
 //// function to create a new table
 sketchdb.create_table = function(table) {
+
+  sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
     //// path to the item/file to be written
@@ -119,6 +175,8 @@ sketchdb.create_table = function(table) {
 //// function to return a list of all tables in the database
 sketchdb.list_tables = function() {
 
+  sketchdb._set_path();
+
   return new Promise(async (resolve, reject) => {
     ////path to the table folder
     const table_path = path.join(store_directory, 'tables/');
@@ -136,6 +194,8 @@ sketchdb.list_tables = function() {
 
 //// function to return all rows/entries for a given table
 sketchdb.get_all = function(table) {
+
+  sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
     ////path to the table folder
@@ -174,6 +234,8 @@ sketchdb.get_all = function(table) {
 //// function to return all rows in a table in which include a given key/value pair
 //// TODO: make this more robust
 sketchdb.filter = function(table, key, value) {
+
+  sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
 
@@ -218,6 +280,8 @@ sketchdb.delete_row = function(table, id) {
 //// function to delete a row in a table
 sketchdb.delete_table = function(table) {
 
+  sketchdb._set_path();
+
   return new Promise(async (resolve, reject) => {
 
     //// path to the row to be deleted
@@ -237,6 +301,8 @@ sketchdb.delete_table = function(table) {
 
 sketchdb.eq_join = function(table_1, table_2, key) {
 
+  sketchdb._set_path();
+
   return new Promise(async (resolve, reject) => {
     const table_1_data = await sketchdb.get_all(table_1);
     const table_2_data = await sketchdb.get_all(table_2);
@@ -254,6 +320,8 @@ sketchdb.eq_join = function(table_1, table_2, key) {
 
 // function to rename a table
 sketchdb.rename_table = function(table, new_name) {
+
+  sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
 

@@ -100,7 +100,7 @@ const data_7 = [data_4, data_5, data_6];
 test(`Test environment variables are setup`, () => {
   expect(process.env.NODE_ENV).toBe('test');
 
-  expect(sketchdb._store).toBe(fixtures_path);
+  expect(sketchdb._set_path()).toBe(fixtures_path);
 });
 
 test(`sketchdb.list_tables returns an array of the table names`, async () => {
