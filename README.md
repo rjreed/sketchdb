@@ -22,12 +22,16 @@ in your project's directory to install a local node module.
 ## Usage
 
 ### Setup
+
+
 run 
 ```console
 npm exec sketchdb-setup
 ```
 
 from the top level of your project directory to setup an instance of sketchdb. 
+
+Alternatively, call sketchdb.setup() from inside a script (note - sketchdb.setup() is async and returns a promise) 
 
 The setup application will create a new directory in that top level directory of the project named "sketchdb_store" where data will be stored, along with a subdirectory named "tables". (that's all sketchdb-setup does)
 
@@ -121,7 +125,7 @@ Inserts a new row into a given table in the database.
 
 **Syntax:** 
 ```javascript
-sketchdb.insert( id, table_name, data )
+sketchdb.insert( table_name, id,  data )
 ```
 
 **Parameters:** 
