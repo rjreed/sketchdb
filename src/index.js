@@ -27,6 +27,16 @@ else {
 //// init sketchdb object for export
 const sketchdb = {};
 
+//// utility function to generate unique IDs
+function gen_uid() {
+    //// base36 timestamp
+    const timestamp = Date.now().toString(36); 
+    //// random string
+    const random = Math.random().toString(36).substring(2, 8); 
+
+    return `${timestamp}_${random}`;
+}
+
 //// internal reference for store_directory path
 sketchdb._set_path = function() {
   if (process.env.NODE_ENV === 'test') {
@@ -74,7 +84,19 @@ sketchdb.setup = function() {
 
 
 //// function to insert a new row into a table
-sketchdb.insert = function(table, id, data) {
+sketchdb.insert = function(...args) {
+  let table, id, data;
+
+  if (args.length === 2) {
+      table = args[0];
+      id = gen_uid();
+      data = args[1];
+
+  } else {
+      table = args[0];
+      id =args[1];
+      data = args[2];
+  };
 
   sketchdb._set_path();
 
@@ -89,7 +111,7 @@ sketchdb.insert = function(table, id, data) {
     //// write the stringified data to a json file in the folder
     await fsp.writeFile(row_path, stringified, { flag: "wx" })
       .then(() => {
-        resolve(true);
+        resolve(id);
       }).catch(error => {
         reject(error);
       });

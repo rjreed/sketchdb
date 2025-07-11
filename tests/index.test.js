@@ -3,15 +3,15 @@
 // LIBRARIES
 
 /// node/core libs
-const fs = require('fs')
-const fsp = require('fs').promises
+const fs = require('fs');
+const fsp = require('fs').promises;
 const path = require('path');
 
 /// vendor libs
 
 /// app/local libs
 const sketchdb = require('../src/index.js');
-const utils = require('../src/utils.js')
+const utils = require('../src/utils.js');
 
 
 // APP
@@ -32,7 +32,7 @@ const table_3_path = path.join(tables_path, table_3);
 
 const path_exists = utils.path_exists;
 
-/// Data fixtures 
+/// Data fixtures
 //// TODO move this out and rename/ reorganize
 
 const data_1 = {
@@ -94,6 +94,8 @@ const data_6 = {
 
 const data_7 = [data_4, data_5, data_6];
 
+let uid;
+
 
 /// Tests
 
@@ -130,13 +132,24 @@ test(`sketchdb.create_table rejects if given a duplicate table name`, async () =
   expect(create_call).rejects.toThrow();
 });
 
-test(`sketchdb.insert inserts an object into new row`, async () => {
+test(`sketchdb.insert (with 3 arguments) inserts an object into new row`, async () => {
   await sketchdb.insert(table_1, 2, data_2);
 
 
   const retrieved_row = await sketchdb.get_row(table_1, 2);
 
   expect(retrieved_row).toEqual(data_2);
+});
+
+
+test(`sketchdb.insert (with 2 arguments) inserts an object into new row`, async () => {
+    uid = await sketchdb.insert(table_1, data_2);
+
+    const retrieved_row = await sketchdb.get_row(table_1, 2);
+
+    console.log('unique ID:', uid);
+
+    expect(retrieved_row).toEqual(data_2);
 });
 
 
@@ -169,13 +182,20 @@ test(`sketchdb.get_row returns a row's data`, async () => {
   expect(retrieved_row).toEqual(data_2);
 });
 
+test(`sketchdb.get_row using uid returns the correct row's data`, async () => {
+  const retrieved_row = await sketchdb.get_row(table_1, uid);
+
+  expect(retrieved_row).toEqual(data_2);
+});
+
+
 test(`sketchdb.get_all returns all of a table's data`, async () => {
   const retrieved_row = await sketchdb.get_all(table_2);
 
   expect(retrieved_row).toEqual(data_7);
 });
 
-test(`sketchdb.get_all rejects with an error if given an incorrect table name`, async () => {
+test(`sketchdb.get_all rejects if given an incorrect table name`, async () => {
   const retrieved_row = sketchdb.get_all('incorrect_table');
 
   expect(retrieved_row).rejects.toThrow();

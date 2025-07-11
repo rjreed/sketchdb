@@ -5,9 +5,10 @@ This is a small file/directory based app for Node JS that provides some basic da
 
 The purpose of this library is to provide a simple database-like storage system for things like small personal projects. It is written to be easy to setup and use.
 
+External edits to directories and files in sketchdb_store will reflect in the database as long as they are proper JSON. 
+
 This library requires no dependencies, and Jest is the only dev dependency.
 
-*Note: This library is currently in a Zero-version and the API may change.* 
 
 ### Installation
 
@@ -127,6 +128,12 @@ Inserts a new row into a given table in the database.
 ```javascript
 sketchdb.insert( table_name, id,  data )
 ```
+or if you want sketchdb to automatically generate a unique id, use: 
+
+```javascript
+sketchdb.insert( table_name, data )
+```
+
 
 **Parameters:** 
 
@@ -136,13 +143,13 @@ sketchdb.insert( table_name, id,  data )
 
 *data:* The data to be inserted. Will be written as a json file. Can be a JS object or valid JSON string.
 
-**Return value:** Returns a Promise. When resolved, Promise returns 
+**Return value:** Returns a Promise. When resolved, Promise returns the id of the new row.
 
 **Example usage:** 
 
 ```javascript
 const user_1 = {
-    'name': 'Bobby Knuckles',
+    'name': 'John Smith',
     'group': '1"
 }
 
@@ -159,6 +166,24 @@ sketchdb.insert('users', unique_id, stringified);
     success_function(results);
 });
 
+```
+or to use 2 arguments and have sketchDB generate a unique id for your row: 
+```javascript
+const user_1 = {
+    'name': 'John Smith',
+    'group': '1"
+}
+
+const stringified = JSON.stringify(user_1);
+
+sketchdb.insert('users', stringified);
+.then(function(results, error) {
+    if (error) {
+        //// handle the error
+    }
+
+    success_function(results);
+});
 ```
 
 ### <a name="get_row"></a> sketchdb.get_row
