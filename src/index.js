@@ -1,4 +1,4 @@
-// LIBRARIES
+//// LIBRARIES
 
 /// node/core libs
 const path = require('path');
@@ -7,16 +7,19 @@ const fsp = require('fs').promises;
 /// vendor libs
 
 /// app/local libs
+const utils = require('./utils.js');
+const gen_uid = utils.gen_uid;
 
-// APP
 
-//// define path for storage
+//// APP
+
+// define path for storage
 let store_directory;
 
-//// name for database storage directory
+// name for database storage directory
 const directory_name = 'sketchdb_store';
 
-//// use tests/fixtures path when testing
+// use tests/fixtures path when testing
 if (process.env.NODE_ENV === 'test') {
   store_directory = path.join(__dirname, '/../tests/fixtures/');
 }
@@ -24,20 +27,11 @@ else {
   store_directory = path.join(process.cwd(), directory_name);
 }
 
-//// init sketchdb object for export
+// init sketchdb object for export
 const sketchdb = {};
 
-//// utility function to generate unique IDs
-function gen_uid() {
-    //// base36 timestamp
-    const timestamp = Date.now().toString(36); 
-    //// random string
-    const random = Math.random().toString(36).substring(2, 8); 
 
-    return `${timestamp}_${random}`;
-}
-
-//// internal reference for store_directory path
+// internal reference for store_directory path
 sketchdb._set_path = function() {
   if (process.env.NODE_ENV === 'test') {
     store_directory = path.join(__dirname, '/../tests/fixtures/');
@@ -49,78 +43,105 @@ sketchdb._set_path = function() {
   return store_directory;
 };
 
-//// function to setup necessary directories for database storage
+// function to setup necessary directories for database storage
 sketchdb.setup = function() {
 
   sketchdb._set_path();
 
   return new Promise(async function(resolve, reject) {
 
-    //// path used to create the database storage directory
+    // path used to create the database storage directory
     const directory = path.resolve(store_directory);
     const tables_directory = path.resolve(store_directory, 'tables/');
 
-    //// create the database directory
+    // create the database directory
     fsp.mkdir(directory).then(function(error) {
 
       if (error) {
         reject(error);
       }
 
-      //// create the tables directory
+      // create the tables directory
       fsp.mkdir(tables_directory).then(function(error) {
 
-        //// does this count as error handling
+        // does this count as error handling
         if (error) {
           reject(error);
         }
 
-        //// resolve when completed
+        // resolve when completed
         resolve();
       });
     });
   });
-}
+};
 
 
-//// function to insert a new row into a table
+// function to insert a new row into a table
 sketchdb.insert = function(...args) {
   let table, id, data;
+  let custom_id = false;
 
   if (args.length === 2) {
-      table = args[0];
-      id = gen_uid();
-      data = args[1];
-
-  } else {
-      table = args[0];
-      id =args[1];
-      data = args[2];
-  };
+    table = args[0];
+    data = args[1];
+  }
+  else {
+    table = args[0];
+    id = args[1];
+    data = args[2];
+    custom_id = true;
+  }
 
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
+    const table_path = path.join(store_directory, 'tables', table);
 
-    //// path to the item/file to be written
-    const row_path = path.join(store_directory, 'tables/', table, id + '.json');
+    // Create if not already defined
+    if (!custom_id) {
+      let attempt = 0;
+      const max_attempts = 10;
 
-    //// stringify the data
-    const stringified = JSON.stringify(data);
+      while (attempt < max_attempts) {
+        id = gen_uid();
+        const row_path = path.join(table_path, id + '.json');
 
-    //// write the stringified data to a json file in the folder
-    await fsp.writeFile(row_path, stringified, { flag: "wx" })
-      .then(() => {
+        try {
+          // write the stringified data to a json file in the folder
+          await fsp.writeFile(row_path, JSON.stringify(data), { flag: 'wx' });
+          return resolve(id);
+        }
+        catch (err) {
+          if (err.code === 'EEXIST') {
+            attempt++;
+            continue;
+          }
+          else {
+            return reject(err);
+          }
+        }
+      }
+
+      return reject(new Error('Failed to generate a unique ID after multiple attempts.'));
+    }
+    else {
+      // Custom ID path
+      const row_path = path.join(table_path, id + '.json');
+
+      try {
+        // write the stringified data to a json file in the folder
+        await fsp.writeFile(row_path, JSON.stringify(data), { flag: 'wx' });
         resolve(id);
-      }).catch(error => {
-        reject(error);
-      });
-
+      }
+      catch (err) {
+        reject(err);
+      }
+    }
   });
 };
 
-
-//// function to update a row
+// function to update a row
 sketchdb.update = function(table, id, data) {
 
   sketchdb._set_path();
@@ -135,16 +156,16 @@ sketchdb.update = function(table, id, data) {
 
     const new_object = JSON.parse(raw);
 
-    //// extract the keys to use in the for of loop
+    // extract the keys to use in the for of loop
     const keys = Object.keys(data);
 
-    //// TODO options overwrite or something
-    //// iterate through key-item pairs and add/replace new/modified pairs
+    // TODO options overwrite or something
+    // iterate through key-item pairs and add/replace new/modified pairs
     for (const item of keys) {
       new_object[item] = data[item];
     }
 
-    //// write updated data to row file
+    // write updated data to row file
     await fsp.writeFile(row_path, JSON.stringify(new_object)).catch(error => {
       reject(error);
     });
@@ -155,35 +176,33 @@ sketchdb.update = function(table, id, data) {
 
 };
 
-//// function to return a row/entry from a table using the row's id
+// function to return a row/entry from a table using the row's id
 sketchdb.get_row = function(table, id) {
-
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
-    const row_path = path.join(store_directory, 'tables/', table, id + '.json');
-
-    const raw = await fsp.readFile(row_path, 'utf8').catch(error => {
-      reject(error);
-    });
-
-    const new_object = JSON.parse(raw);
-
-    resolve(new_object);
+    try {
+      const row_path = path.join(store_directory, 'tables', table, id + '.json');
+      const raw = await fsp.readFile(row_path, 'utf8');
+      const new_object = JSON.parse(raw);
+      resolve(new_object);
+    }
+    catch (error) {
+      reject(error); // 
+    }
   });
-
 };
 
-//// function to create a new table
+// function to create a new table
 sketchdb.create_table = function(table) {
 
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
-    //// path to the item/file to be written
+    // path to the item/file to be written
     const item_path = path.join(store_directory, 'tables/', table);
 
-    //// make the folder 
+    // make the folder 
     await fsp.mkdir(item_path).catch(error => {
       reject(error);
     });
@@ -194,56 +213,56 @@ sketchdb.create_table = function(table) {
 
 };
 
-//// function to return a list of all tables in the database
+// function to return a list of all tables in the database
 sketchdb.list_tables = function() {
 
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
-    ////path to the table folder
+    //path to the table folder
     const table_path = path.join(store_directory, 'tables/');
 
-    //// read the table folder and get the file names
+    // read the table folder and get the file names
     fsp.readdir(table_path)
       .then(async function(files) {
 
-        //// return the array of filenames
+        // return the array of filenames
         resolve(files);
       });
 
   });
 };
 
-//// function to return all rows/entries for a given table
+// function to return all rows/entries for a given table
 sketchdb.get_all = function(table) {
 
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
-    ////path to the table folder
+    //path to the table folder
     const table_path = path.join(store_directory, 'tables/', table);
 
-    //// read the table folder and get the file names
+    // read the table folder and get the file names
     fsp.readdir(table_path)
       .then(async function(files) {
 
-        //// init an empty array
+        // init an empty array
         let data = [];
 
-        //// push all the parsed data from the files into the 'data' array
+        // push all the parsed data from the files into the 'data' array
         const build_data = files.map(async (file) => {
           const row_path = path.join(table_path, file);
 
           const contents = await fsp.readFile(row_path, 'utf8');
 
-          //// push the object to the data array
+          // push the object to the data array
           data.push(JSON.parse(contents));
         })
 
-        //// Promise.all the async read funtions
+        // Promise.all the async read funtions
         await Promise.all(build_data);
 
-        //// return the data array
+        // return the data array
         resolve(data);
       }).catch(error => {
         reject(error);
@@ -253,20 +272,20 @@ sketchdb.get_all = function(table) {
 
 };
 
-//// function to return all rows in a table in which include a given key/value pair
-//// TODO: make this more robust
+// function to return all rows in a table in which include a given key/value pair
+// TODO: make this more robust
 sketchdb.filter = function(table, key, value) {
 
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
 
-    //// retrieve all rows in the given table using get_all
+    // retrieve all rows in the given table using get_all
     const array = await sketchdb.get_all(table).catch(error => {
       reject(error);
     });
 
-    //// filter the items based on the provided key/value pair
+    // filter the items based on the provided key/value pair
     const filtered = array.filter(function(item, index) {
       if (item[key] === value) {
         return true;
@@ -280,15 +299,15 @@ sketchdb.filter = function(table, key, value) {
   });
 };
 
-//// function to delete a row in a table
+// function to delete a row in a table
 sketchdb.delete_row = function(table, id) {
 
   return new Promise(async (resolve, reject) => {
 
-    //// path to the row to be deleted
+    // path to the row to be deleted
     const row_path = path.join(store_directory, 'tables/', table + '/', id + '.json');
 
-    //// unlink/delete the json file for the row
+    // unlink/delete the json file for the row
     fsp.unlink(path.join(row_path))
       .then(() => resolve(true))
       .catch(error => {
@@ -299,17 +318,44 @@ sketchdb.delete_row = function(table, id) {
 };
 
 
-//// function to delete a row in a table
+/// function to move a row from one table to another
+sketchdb.move_row = function(from_table, to_table, id) {
+  sketchdb._set_path();
+
+  return new Promise(async (resolve, reject) => {
+    try {
+      const from_path = path.join(store_directory, 'tables', from_table, id + '.json');
+      const to_path = path.join(store_directory, 'tables', to_table, id + '.json');
+
+      // Read the row data
+      const data = await fsp.readFile(from_path, 'utf8');
+
+      // Write to the new location
+      await fsp.writeFile(to_path, data, { flag: 'wx' }); // use 'wx' to avoid overwriting
+
+      // Delete the original file
+      await fsp.unlink(from_path);
+
+      resolve(true);
+    }
+    catch (error) {
+      reject(error);
+    }
+  });
+};
+
+
+// function to delete a row in a table
 sketchdb.delete_table = function(table) {
 
   sketchdb._set_path();
 
   return new Promise(async (resolve, reject) => {
 
-    //// path to the row to be deleted
+    // path to the row to be deleted
     const table_path = path.join(store_directory, 'tables/', table + '/');
 
-    //// delete the directory and contents
+    // delete the directory and contents
     fsp.rm(table_path, { recursive: true, force: true })
       .then(() =>
         resolve(true))
@@ -347,11 +393,11 @@ sketchdb.rename_table = function(table, new_name) {
 
   return new Promise(async (resolve, reject) => {
 
-    //// paths to old table and new table 
+    // paths to old table and new table 
     const old_path = path.join(store_directory, 'tables/', table + '/');
     const new_path = path.join(store_directory, 'tables/', new_name + '/');
 
-    //// call fsp.rename with paths
+    // call fsp.rename with paths
     fsp.rename(old_path, new_path)
       .then(() =>
         resolve(true))

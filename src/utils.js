@@ -33,5 +33,16 @@ utils.path_exists = function(path) {
     .catch(() => false);
 };
 
+// utility function to generate unique IDs
+utils.gen_uid = function gen_uid() {
+  // base36 timestamp
+  const timestamp = Date.now().toString(36);
+  // random string
+  const random = Math.random().toString(36).substring(2, 8);
+
+  return `${timestamp}_${random}`;
+}
+
+
 
 module.exports = utils;

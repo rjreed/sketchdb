@@ -1,20 +1,17 @@
 /* global expect beforeAll afterAll */
 
-// LIBRARIES
+//// LIBRARIES
 
 /// node/core libs
 const fs = require('fs');
 const fsp = require('fs').promises;
 const path = require('path');
 
-/// vendor libs
-
 /// app/local libs
 const sketchdb = require('../src/index.js');
 const utils = require('../src/utils.js');
 
-
-// APP
+//// APP
 
 /// Paths and directory names
 const fixtures_path = path.join(__dirname, '/fixtures/');
@@ -29,69 +26,19 @@ const table_1_path = path.join(tables_path, table_1);
 const table_2_path = path.join(tables_path, table_2);
 const table_3_path = path.join(tables_path, table_3);
 
-
 const path_exists = utils.path_exists;
 
 /// Data fixtures
-//// TODO move this out and rename/ reorganize
-
-const data_1 = {
-  "title": "mauris sit amet",
-  "author": "Basia Neal",
-  "date": "Nov 27, 2022"
-};
-
-const data_2 = {
-  "title": "sociosqu ad litora",
-  "author": "Steven Burks",
-  "date": "Nov 8, 2021"
-};
-
-const data_3 = {
-  "title": "erat. Vivamus nisi.",
-  "author": "Aline Love",
-  "date": "Nov 12, 2022"
-};
-
-const data_3_update_1 = {
-  "date": "Nov 14, 2022"
-};
-
-const data_3_2 = {
-  "title": "erat. Vivamus nisi.",
-  "author": "Aline Love",
-  "date": "Nov 14, 2022",
-};
-
-const data_3_update_2 = {
-  "coauthor": "Ben Bates"
-};
-
-const data_3_3 = {
-  "title": "erat. Vivamus nisi.",
-  "author": "Aline Love",
-  "date": "Nov 14, 2022",
-  "coauthor": "Ben Bates"
-};
-
-const data_4 = {
-  "name": "Aline Love",
-  "email": "alinelove@gmail.com",
-  "group": "1"
-};
-
-const data_5 = {
-  "name": "Ben Bates",
-  "email": "ben.bates@gmail.com",
-  "group": "2"
-};
-
-const data_6 = {
-  "name": "Basia Neal",
-  "email": "basiag.neal@gmail.com",
-  "group": "2"
-};
-
+const data_1 = { title: "mauris sit amet", author: "Basia Neal", date: "Nov 27, 2022" };
+const data_2 = { title: "sociosqu ad litora", author: "Steven Burks", date: "Nov 8, 2021" };
+const data_3 = { title: "erat. Vivamus nisi.", author: "Aline Love", date: "Nov 12, 2022" };
+const data_3_update_1 = { date: "Nov 14, 2022" };
+const data_3_2 = { title: "erat. Vivamus nisi.", author: "Aline Love", date: "Nov 14, 2022" };
+const data_3_update_2 = { coauthor: "Ben Bates" };
+const data_3_3 = { title: "erat. Vivamus nisi.", author: "Aline Love", date: "Nov 14, 2022", coauthor: "Ben Bates" };
+const data_4 = { name: "Aline Love", email: "alinelove@gmail.com", group: "1" };
+const data_5 = { name: "Ben Bates", email: "ben.bates@gmail.com", group: "2" };
+const data_6 = { name: "Basia Neal", email: "basiag.neal@gmail.com", group: "2" };
 const data_7 = [data_4, data_5, data_6];
 
 let uid;
@@ -157,6 +104,38 @@ test(`sketchdb.insert rejects if given a duplicate row id`, async () => {
   const insert_call = sketchdb.insert(table_1, 1, data_1);
 
   expect(insert_call).rejects.toThrow();
+});
+
+
+test('sketchdb.insert retries when a generated ID already exists', async () => {
+  const originalGenUid = utils.gen_uid;
+
+  // Create a fake ID to simulate collision
+  const fakeId = 'fake_id_collision';
+  let callCount = 0;
+
+  // Monkey-patch the gen_uid function
+  utils.gen_uid = () => {
+    callCount++;
+    return callCount === 1 ? fakeId : originalGenUid();
+  };
+
+  // Insert a row manually with the fake ID
+  await sketchdb.insert(table_3, fakeId, { test: 'original' });
+
+  // Now use insert() with 2 args — this should trigger a retry
+  const newId = await sketchdb.insert(table_3, { test: 'retry' });
+
+  expect(newId).not.toBe(fakeId);
+
+  const original = await sketchdb.get_row(table_3, fakeId);
+  const retried = await sketchdb.get_row(table_3, newId);
+
+  expect(original).toEqual({ test: 'original' });
+  expect(retried).toEqual({ test: 'retry' });
+
+  // Restore the original gen_uid
+  utils.gen_uid = originalGenUid;
 });
 
 
@@ -232,20 +211,41 @@ test(`sketchdb.rename_table renames a table directory`, async () => {
   expect(exists).toBe(true);
 });
 
+test('sketchdb.move_row moves a row from one table to another', async () => {
+  const id = 'movetest_1';
+  const rowData = { title: 'Move Me', author: 'Mover' };
+
+  // Ensure both tables exist
+  await sketchdb.create_table('from_table');
+  await sketchdb.create_table('to_table');
+
+  // Insert row into source table
+  await sketchdb.insert('from_table', id, rowData);
+
+  // Verify row exists in source
+  let original = await sketchdb.get_row('from_table', id);
+  expect(original).toEqual(rowData);
+
+  // Move the row
+  await sketchdb.move_row('from_table', 'to_table', id);
+
+  // Confirm it's removed from source
+  await expect(sketchdb.get_row('from_table', id)).rejects.toThrow();
+
+  // Confirm it's present and correct in destination
+  const moved = await sketchdb.get_row('to_table', id);
+  expect(moved).toEqual(rowData);
+});
+
+
 
 
 /// Teardown and Setup
 
-//// delete all the test fixtures
-afterAll(() => {
 
-  return fsp.rm(tables_path, { recursive: true, force: true });
-
-});
-
-//// copy the static fixtures over to the tables path
 afterAll(async () => {
-
-  return fsp.cp(static_path, tables_path, { recursive: true });
-
+  // Clean up any dynamically created tables
+  await fsp.rm(tables_path, { recursive: true, force: true });
+  await fsp.cp(static_path, tables_path, { recursive: true });
 });
+
