@@ -130,5 +130,34 @@ dist
 .pnp.*
 
 # Temp files
+
+# Emacs backups
 *~
-*#
+\#*\#
+.\#*
+
+# Emacs autosave files
+*.elc
+
+# Emacs desktop/session files
+.desktop
+.desktop.lock
+
+# TRAMP
+.tramp
+
+# Projectile cache
+.projectile
+
+# Org-mode clock and agenda caches
+.org-id-locations
+.org-agenda-*
+
+# Files in /tmp, just in case
+/tmp/*
+
+# Markdown Preview Mode with custom backend (e.g. gfm, etc)
+*markdown-preview*.html
+
+# Any HTML files starting with a dot (hidden preview files)
+.*.html
