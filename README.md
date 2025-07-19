@@ -1,417 +1,323 @@
 # sketchdb
 
 ### About
-This is a small file/directory based app for Node JS that provides some basic database functionality for storing key-value pairs in table/row/entry format as .json files. 
 
-The purpose of this library is to provide a simple database-like storage system for things like small personal projects. It is written to be easy to setup and use.
+This is a small file/directory based app for Node JS that provides some basic database functionality for storing key-value pairs in table/row/entry format as .json files.
 
-External edits to directories and files in sketchdb_store will reflect in the database as long as they are proper JSON. 
+The purpose of this library is to provide a simple database-like storage system for things like small personal projects or prototyping. It is written to be easy to setup and use.
 
-This library requires no dependencies, and Jest is the only dev dependency.
-
+This library requires no dependencies.
 
 ### Installation
 
-run 
+run
+
 ```console
 npm install sketchdb
 ```
 
 in your project's directory to install a local node module.
 
-
 ## Usage
 
 ### Setup
 
+run
 
-run 
 ```console
 npm exec sketchdb-setup
 ```
 
-from the top level of your project directory to setup an instance of sketchdb. 
+from the top level of your project directory to setup an instance of sketchdb.
 
-Alternatively, call sketchdb.setup() from inside a script (note - sketchdb.setup() is async and returns a promise) 
+Alternatively, call sketchdb.setup() from inside a script (note - sketchdb.setup() is async and returns a promise)
 
-The setup application will create a new directory in that top level directory of the project named "sketchdb_store" where data will be stored, along with a subdirectory named "tables". (that's all sketchdb-setup does)
+The setup application will create a new directory in that top level directory of the project named "sketchdb\_store" where data will be stored, along with a subdirectory named "tables". (that's all sketchdb-setup does)
 
+External edits to directories and files in sketchdb\_store will reflect in the database as long as they are proper JSON.
 
 ### API
 
-All function calls to sketchdb return a Promise. 
+All function calls to sketchdb return a Promise.
 
-Calls to retrieve data will resolve to that data or reject with an error. 
+Calls to retrieve data will resolve to that data or reject with an error.
 
 Calls to write data or perform a delete operation will resolve with true on success (this will probably change to an object of some sort with more info but haven't decided yet)
 
-
 ### Methods
 
-- [sketchdb.list_tables](#list_tables)
-- [sketchdb.create_table](#create_table)
-- [sketchdb.insert](#insert)
-- [sketchdb.get_row](#get_row)
-- [sketchdb.get_all](#get_all)
-- [sketchdb.update](#update)
-- [sketchdb.delete_row](#delete_row)
-- [sketchdb.delete_table](#delete_table)
-- [sketchdb.filter](#filter)
-- [sketchdb.rename_table](#rename_table)
+* [sketchdb.list\_tables](#list_tables)
+* [sketchdb.create\_table](#create_table)
+* [sketchdb.insert](#insert)
+* [sketchdb.get\_row](#get_row)
+* [sketchdb.get\_all](#get_all)
+* [sketchdb.update](#update)
+* [sketchdb.delete\_row](#delete_row)
+* [sketchdb.delete\_table](#delete_table)
+* [sketchdb.filter](#filter)
+* [sketchdb.rename\_table](#rename_table)
 
-### <a name="list_tables"></a> sketchdb.list_tables
+### <a name="list_tables"></a> sketchdb.list\_tables
+
 List the tables in the database in array format.
 
-**Syntax:** 
+**Syntax:**
+
 ```javascript
 sketchdb.list_tables()
 ```
 
-**Parameters:** 
+**Parameters:**
 
 none
 
 **Return value:** Returns a Promise. When resolved, Promise returns an array of the table names as strings.
 
-**Example usage:** 
+**Example usage:**
 
 ```javascript
-
 sketchdb.list_tables()
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-
-        do_something_with_results();
-        
-        /*
-        Results will be an array of the table names such as ["users","posts","authors"]
-        */
-
-    });
+  .then(function(results) {
+    do_something_with_results();
+    // Results will be an array like ["users","posts","authors"]
+  });
 ```
 
-### <a name="create_table"></a> sketchdb.create_table
+### <a name="create_table"></a> sketchdb.create\_table
+
 Creates a new table in the database.
 
-**Syntax:** 
+**Syntax:**
+
 ```javascript
-sketchdb.create_table( 'table_name' )
+sketchdb.create_table('table_name')
 ```
 
-**Parameters:** 
+**Parameters:**
 
-*table_name:* The name of the table to create (as a string)
+*table\_name:* The name of the table to create (as a string)
 
-**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
+**Return value:** Returns a Promise. Resolves with true. Rejects with an error if the table exists.
 
-**Example usage:** 
+**Example usage:**
+
 ```javascript
 sketchdb.create_table('users')
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-
-        success_function(results);
-    });
+  .then(success_function)
+  .catch(error_handler);
 ```
 
-**Note:** If you want to add tables to a project without writing functions to do so, you can create a subdirectory in "./sketchdb_store/tables/" with the name of the table you want to create. 
-For example, making "./sketchdb_store/tables/users/" will create a "users" table in the schema.
+**Note:** You can also create a table by making a subdirectory in "./sketchdb\_store/tables/" with the table name.
 
 ### <a name="insert"></a> sketchdb.insert
-Inserts a new row into a given table in the database.
 
-**Syntax:** 
-```javascript
-sketchdb.insert( table_name, id,  data )
-```
-or if you want sketchdb to automatically generate a unique id, use: 
+Insert a new row into a given table in the database.
+
+**Syntax:**
 
 ```javascript
-sketchdb.insert( table_name, data )
+sketchdb.insert(table_name, id, data)
 ```
 
-
-**Parameters:** 
-
-*id:* a string containing the id for the row. Must be unique to the table and valid as a directory name.
-
-*table_name:* The name of the table to insert the row into. Table must already exist.
-
-*data:* The data to be inserted. Will be written as a json file. Can be a JS object or valid JSON string.
-
-**Return value:** Returns a Promise. When resolved, Promise returns the id of the new row.
-
-**Example usage:** 
+Or let sketchdb generate a unique id:
 
 ```javascript
-const user_1 = {
-    'name': 'John Smith',
-    'group': '1"
-}
-
-const unique_id = 'uq13g564d';
-
-const stringified = JSON.stringify(user_1);
-
-sketchdb.insert('users', unique_id, stringified);
-.then(function(results, error) {
-    if (error) {
-        //// handle the error
-    }
-
-    success_function(results);
-});
-
+sketchdb.insert(table_name, data)
 ```
-or to use 2 arguments and have sketchDB generate a unique id for your row: 
+
+**Parameters:**
+
+* *table\_name* (string): Table to insert into.
+* *id* (string, optional): Unique row id. (Optional, will auto-generate if omitted)
+* *data* (object or JSON string): Data to store as JSON.
+
+**Return value:** Returns a Promise. Resolves with the id.
+
+**Example usage:**
+
 ```javascript
-const user_1 = {
-    'name': 'John Smith',
-    'group': '1"
-}
-
-const stringified = JSON.stringify(user_1);
-
-sketchdb.insert('users', stringified);
-.then(function(results, error) {
-    if (error) {
-        //// handle the error
-    }
-
-    success_function(results);
-});
+const user = { name: 'John', group: '1' };
+sketchdb.insert('users', user)
+  .then(function(id) {
+    // use the returned unique id
+  });
 ```
 
-### <a name="get_row"></a> sketchdb.get_row
-Retrieves a row from a given table.
+### <a name="get_row"></a> sketchdb.get\_row
 
-**Syntax:** 
+Retrieve a row from a given table.
+
+**Syntax:**
+
 ```javascript
-sketchdb.get_row( table_name, id )
+sketchdb.get_row(table_name, id)
 ```
 
-**Parameters:** 
+**Parameters:**
 
-*table_name:* The name of the table the row belongs to.
+* *table\_name* (string): Table name
+* *id* (string): Row id
 
-*id:* a string containing the id for the row to retrieve. 
+**Return value:** Resolves to the data object for the row, or rejects if not found.
 
+**Example usage:**
 
-**Return value:** Returns a Promise. When resolved, Promise returns 
-
-**Example usage:** 
 ```javascript
 sketchdb.get_row('users', '178')
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-
-        success_function(results);
-    });
-
+  .then(do_something)
+  .catch(handle_error);
 ```
 
+### <a name="get_all"></a> sketchdb.get\_all
 
-### <a name="get_all"></a> sketchdb.get_all
-Retrieves all rows from a given table as an array of objects.
+Retrieve all rows from a given table as an array.
 
-**Syntax:** 
+**Syntax:**
+
 ```javascript
-sketchdb.get_all( table_name )
+sketchdb.get_all(table_name)
 ```
 
-**Parameters:** 
+**Return value:** Resolves to an array of row objects. Rejects if table not found.
 
-*table_name:* The name of the table.
+**Example usage:**
 
-**Return value:** Returns a Promise. When resolved, Promise returns an array of objects (the data from each row). On rejection, Promise returns the error.
-
-**Example usage:** 
 ```javascript
 sketchdb.get_all('users')
-    .then(function(results, error) {
-        if (error) {
-            //// handle the error
-        }
-
-        //// results will be an array of the row objects
-        success_function(results);
-    })
+  .then(process_all_users)
+  .catch(handle_error);
 ```
 
 ### <a name="update"></a> sketchdb.update
-Updates a row with new and/or replacement data as key-value pairs of an object. 
 
+Update a row with new or replacement data.
 
-**Syntax:** 
-```javascript
-sketchdb.update( id, table_name, data )
-```
-
-**Parameters:** 
-
-*id:* a string containing the id for the row. Must be unique to the table and valid as a directory name.
-
-*table_name:* The name of the table the row belongs to.
-
-*data:* The data to be used to update the row. 
-
-**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
-
-**Example usage:** 
+**Syntax:**
 
 ```javascript
-const user_1 = {
-    'name': 'Bobby Knuckles',
-    'group': '1'
-}
-const new_data = {
-    'group': '2'
-}
-const unique_id = 'uq13g564d';
-
-sketchdb.update("users", unique_id, new_data);
-.then(function(results, error) {
-    if (error) {
-        //// handle the error
-    }
-
-    /* the updated row's object will look like :
-        {
-            'name':'Bobby Knuckles',
-            'group': '2'
-         }
-       */
-
-    success_function(results);
-});
-
+sketchdb.update(table_name, id, data)
 ```
 
+**Parameters:**
 
-### <a name="delete_row"></a> sketchdb.delete_row
-Deletes a row from a given table.
+* *table\_name* (string): Table name
+* *id* (string): Row id
+* *data* (object): Data to merge/update
 
-**Syntax:** 
+**Return value:** Resolves with true on success, rejects on error.
+
+**Example usage:**
+
 ```javascript
-sketchdb.delete_row( table_name, id )
+sketchdb.update('users', 'uq13g564d', { group: '2' })
+  .then(success_function)
+  .catch(handle_error);
 ```
 
-**Parameters:** 
+### <a name="delete_row"></a> sketchdb.delete\_row
 
-*table_name:* The name of the table the row belongs to.
+Delete a row from a table.
 
-*id:* a string containing the id for the row to delete. 
+**Syntax:**
 
+```javascript
+sketchdb.delete_row(table_name, id)
+```
 
-**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
+**Return value:** Resolves with true on success.
 
-**Example usage:** 
+**Example usage:**
+
 ```javascript
 sketchdb.delete_row('users', '178')
-  .then(function(results, error) {
-    if (error) {
-      //// handle the error
-    }
-
-    success_function(results);
-  })
-
+  .then(success_function)
+  .catch(handle_error);
 ```
 
-### <a name="delete_table"></a> sketchdb.delete_table
-Deletes a table and all contents (rows).
+### <a name="delete_table"></a> sketchdb.delete\_table
 
-**Syntax:** 
+Delete an entire table and its rows.
+
+**Syntax:**
+
 ```javascript
-sketchdb.delete_table( table_name )
+sketchdb.delete_table(table_name)
 ```
 
-**Parameters:** 
+**Return value:** Resolves with true on success.
 
-table_name: The name of the table as a string.
+**Example usage:**
 
-**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
-
-**Example usage:** 
 ```javascript
 sketchdb.delete_table('students')
-  .then(function(result, error) {
-    if (error) {
-      //// handle the error
-    }
-
-    success_function();
-  });
+  .then(success_function)
+  .catch(handle_error);
 ```
 
 ### <a name="filter"></a> sketchdb.filter
-Return an array of any rows in a table that include a given key/value pair
 
+Return an array of all rows in a table with a given key/value pair.
 
-**Syntax:** 
-```javascript
-sketchdb.filter( table_name, key, value )
-```
-
-**Parameters:** 
-
-*table_name:* The name of the table the row belongs to.
-
-*key:* The key (as a string) to be used to filter the rows by { *key* : value } 
-
-*value:* The value (as a string) to be used to filter the rows by { key : *value* } 
-
-**Return value:** Returns a Promise.  When resolved, Promise returns 
-
-*Example usage:* 
+**Syntax:**
 
 ```javascript
-sketchdb.filter('users', 'group', 'superuser');
-.then(function(results, error) {
-  if (error) {
-    //// handle the error
-  }
-
-  do_something_with_results();
-
-  /*
-       results will look something like:
-       [{ 'username': 'user_1','group': 'superuser' }, {'username': 'user_3','group': 'superuser'}]
-   
-   */
-});
+sketchdb.filter(table_name, key, value)
 ```
 
+**Return value:** Resolves to array of row objects with matching key/value.
 
-### <a name="rename_table"></a> sketchdb.rename_table
-Renames a table
+**Example usage:**
 
-**Syntax:** 
 ```javascript
-sketchdb.rename_table( table, new_name )
+sketchdb.filter('users', 'group', 'superuser')
+  .then(console.log)
+  .catch(handle_error);
 ```
 
-**Parameters:** 
+### <a name="rename_table"></a> sketchdb.rename\_table
 
-table: The name of the (old) table to be renamed (as a string).
-new_name: The new name for the table (as a string).
+Rename a table.
 
-**Return value:** Returns a Promise. When resolved, Promise returns true. On rejection, Promise returns the error.
+**Syntax:**
 
-**Example usage:** 
+```javascript
+sketchdb.rename_table(table, new_name)
+```
+
+**Return value:** Resolves with true on success.
+
+**Example usage:**
+
 ```javascript
 sketchdb.rename_table('authors', 'contributors')
-  .then(function(result, error) {
-    if (error) {
-      //// handle the error
-    }
+  .then(success_function)
+  .catch(handle_error);
+```
 
-    success_function();
-  });
+---
+
+### <a name="move_row"></a> sketchdb.move\_row
+
+Move a row from one table to another (retaining the same row id).
+
+**Syntax:**
+
+```javascript
+sketchdb.move_row(from_table, to_table, id)
+```
+
+**Parameters:**
+
+* *from\_table* (string): The table to move the row **from**
+* *to\_table* (string): The table to move the row **to**
+* *id* (string): The id of the row to move
+
+**Return value:** Resolves with true on success. Rejects with an error if the source row does not exist, or the destination already has the id.
+
+**Example usage:**
+
+```javascript
+sketchdb.move_row('drafts', 'posts', '12345')
+  .then(() => console.log('Row moved!'))
+  .catch(handle_error);
 ```

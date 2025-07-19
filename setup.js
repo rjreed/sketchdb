@@ -4,8 +4,16 @@
 
 /// node/core libs
 
-/// app/local libs
-const sketchdb = require('./src/index.js');
+// app/local libs
+import sketchdb from './src/index.js';
 
-// APP 
-sketchdb.setup();
+// APP
+sketchdb
+  .setup()
+  .then(() => {
+    console.log('sketchdb setup complete.');
+  })
+  .catch((err) => {
+    console.error('sketchdb setup failed:', err);
+    process.exit(1);
+  });

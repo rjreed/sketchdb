@@ -1,48 +1,23 @@
-// LIBRARIES
+//// LIBRARIES
 
 /// node/core libs
-const path = require('path');
-const fs = require('fs');
-const fsp = require('fs').promises;
+import { randomUUID } from 'crypto';
+import { promises as fsp } from 'fs';
 
-/// vendor libs
-
-/// app/local libs
-
-
-// APP
-
-
-const utils = {};
-
-//// function to delete a directory and files
-utils.delete_directory = function(path) {
-
-  return new Promise(function(resolve, reject) {
-
-    fsp.rm(path, { recursive: true, force: true }).then(() =>
-      resolve()).catch(error => {
-      reject(error);
-    });
-  });
-};
-
-utils.path_exists = function(path) {
-  return fsp.access(path)
-    .then(() => true)
-    .catch(() => false);
-};
-
-// utility function to generate unique IDs
-utils.gen_uid = function gen_uid() {
-  // base36 timestamp
-  const timestamp = Date.now().toString(36);
-  // random string
-  const random = Math.random().toString(36).substring(2, 8);
-
-  return `${timestamp}_${random}`;
+//// APP
+export function gen_uid() {
+    return randomUUID();
 }
 
+export function delete_directory(dirPath) {
+    return fsp.rm(dirPath, { recursive: true, force: true });
+}
 
-
-module.exports = utils;
+export async function path_exists(filePath) {
+    try {
+        await fsp.access(filePath);
+        return true;
+    } catch {
+        return false;
+    }
+}
