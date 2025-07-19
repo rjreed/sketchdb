@@ -1,20 +1,30 @@
 {
-	"name": "sketchdb",
-	"version": "1.0.0",
-	"description": "A simple directory/file based database app.",
-	"main": "index.js",
-	"type": "module",
-	"scripts": {
-		"test": "NODE_ENV=test node --test --test-reporter=spec"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/rjreed/sketchdb"
-	},
-	"bin": {
-		"sketchdb-setup": "./setup.js"
-	},
-	"keywords": ["database", "db"],
-	"author": "Rocky Reed",
-	"license": "0BSD"
+  "name": "sketchdb",
+  "version": "1.1.0",
+  "description": "A simple directory/file based database app.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_ENV=test node --test --test-reporter=spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rjreed/sketchdb"
+  },
+  "bin": {
+    "sketchdb-setup": "./setup.js"
+  },
+  "keywords": [
+    "database",
+    "db",
+    "flat",
+    "JSON",
+    "nosql",
+    "flatfile",
+    "flat-file",
+    "zero-dependencies",
+    "js-database"
+  ],
+  "author": "Rocky Reed",
+  "license": "0BSD"
 }

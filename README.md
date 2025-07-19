@@ -57,6 +57,28 @@ Calls to write data or perform a delete operation will resolve with true on succ
 * [sketchdb.filter](#filter)
 * [sketchdb.rename\_table](#rename_table)
 
+### CamelCase Aliases
+
+For your convenience, all main API functions in sketchdb are available in both `snake_case` and `camelCase` formats. You can use whichever naming style fits your project best—they are fully interchangeable.
+
+**Examples:**
+
+```js
+sketchdb.createTable = sketchdb.create_table;
+sketchdb.listTables = sketchdb.list_tables;
+sketchdb.getRow = sketchdb.get_row;
+sketchdb.getAll = sketchdb.get_all;
+sketchdb.deleteRow = sketchdb.delete_row;
+sketchdb.deleteTable = sketchdb.delete_table;
+sketchdb.renameTable = sketchdb.rename_table;
+sketchdb.moveRow = sketchdb.move_row;
+sketchdb.insert 
+sketchdb.update 
+```
+
+All other methods follow the same pattern.
+
+
 ### <a name="list_tables"></a> sketchdb.list\_tables
 
 List the tables in the database in array format.

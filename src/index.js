@@ -200,5 +200,15 @@ sketchdb.rename_table = async function (table, new_name) {
   return true;
 };
 
+// camelCase aliases
+sketchdb.createTable = sketchdb.create_table;
+sketchdb.listTables = sketchdb.list_tables;
+sketchdb.getRow = sketchdb.get_row;
+sketchdb.getAll = sketchdb.get_all;
+sketchdb.deleteRow = sketchdb.delete_row;
+sketchdb.deleteTable = sketchdb.delete_table;
+sketchdb.renameTable = sketchdb.rename_table;
+sketchdb.moveRow = sketchdb.move_row;
+
 // EXPORTS
 export default sketchdb;
