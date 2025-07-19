@@ -13,7 +13,7 @@
 <body>
 
 <h1 id="sketchdb">sketchdb</h1>
-<h3 id="about">About</h3>
+<h2 id="about">About</h2>
 <p>This is a small file/directory based app for Node JS that provides
 some basic database functionality for storing key-value pairs in
 table/row/entry format as .json files.</p>
@@ -21,12 +21,12 @@ table/row/entry format as .json files.</p>
 storage system for things like small personal projects or prototyping.
 It is written to be easy to setup and use.</p>
 <p>This library requires no dependencies.</p>
-<h3 id="installation">Installation</h3>
+<h1 id="installation">Installation</h1>
+<h2 id="download">Download</h2>
 <p>run</p>
 <pre class="console"><code>npm install sketchdb</code></pre>
 <p>in your project’s directory to install a local node module.</p>
-<h2 id="usage">Usage</h2>
-<h3 id="setup">Setup</h3>
+<h2 id="setup">Setup</h2>
 <p>run</p>
 <pre class="console"><code>npm exec sketchdb-setup</code></pre>
 <p>from the top level of your project directory to setup an instance of
@@ -39,14 +39,15 @@ stored, along with a subdirectory named “tables”. (that’s all
 sketchdb-setup does)</p>
 <p>External edits to directories and files in sketchdb_store will
 reflect in the database as long as they are proper JSON.</p>
-<h3 id="api">API</h3>
+<h1 id="usage">Usage</h1>
+<h2 id="api">API</h2>
 <p>All function calls to sketchdb return a Promise.</p>
 <p>Calls to retrieve data will resolve to that data or reject with an
 error.</p>
 <p>Calls to write data or perform a delete operation will resolve with
 true on success (this will probably change to an object of some sort
 with more info but haven’t decided yet)</p>
-<h3 id="methods">Methods</h3>
+<h2 id="methods">Methods</h2>
 <ul>
 <li><a href="#list_tables">sketchdb.list_tables</a></li>
 <li><a href="#create_table">sketchdb.create_table</a></li>
@@ -76,6 +77,7 @@ are fully interchangeable.</p>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="at">insert</span> </span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="at">update</span> </span></code></pre></div>
 <p>All other methods follow the same pattern.</p>
+<hr />
 <h3 id="sketchdb.list_tables"><a name="list_tables"></a>
 sketchdb.list_tables</h3>
 <p>List the tables in the database in array format.</p>
@@ -93,6 +95,7 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">do_something_with_results</span>()<span class="op">;</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Results will be an array like [&quot;users&quot;,&quot;posts&quot;,&quot;authors&quot;]</span></span>
 <span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.create_table"><a name="create_table"></a>
 sketchdb.create_table</h3>
 <p>Creates a new table in the database.</p>
@@ -111,6 +114,7 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(error_handler)<span class="op">;</span></span></code></pre></div>
 <p><strong>Note:</strong> You can also create a table by making a
 subdirectory in “./sketchdb_store/tables/” with the table name.</p>
+<hr />
 <h3 id="sketchdb.insert"><a name="insert"></a> sketchdb.insert</h3>
 <p>Insert a new row into a given table in the database.</p>
 <p><strong>Syntax:</strong></p>
@@ -135,6 +139,7 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb10
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(<span class="kw">function</span>(id) {</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">// use the returned unique id</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.get_row"><a name="get_row"></a> sketchdb.get_row</h3>
 <p>Retrieve a row from a given table.</p>
 <p><strong>Syntax:</strong></p>
@@ -152,6 +157,7 @@ row, or rejects if not found.</p>
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">get_row</span>(<span class="st">&#39;users&#39;</span><span class="op">,</span> <span class="st">&#39;178&#39;</span>)</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(do_something)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.get_all"><a name="get_all"></a> sketchdb.get_all</h3>
 <p>Retrieve all rows from a given table as an array.</p>
 <p><strong>Syntax:</strong></p>
@@ -164,6 +170,7 @@ Rejects if table not found.</p>
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">get_all</span>(<span class="st">&#39;users&#39;</span>)</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(process_all_users)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.update"><a name="update"></a> sketchdb.update</h3>
 <p>Update a row with new or replacement data.</p>
 <p><strong>Syntax:</strong></p>
@@ -182,6 +189,7 @@ on error.</p>
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">update</span>(<span class="st">&#39;users&#39;</span><span class="op">,</span> <span class="st">&#39;uq13g564d&#39;</span><span class="op">,</span> { <span class="dt">group</span><span class="op">:</span> <span class="st">&#39;2&#39;</span> })</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(success_function)</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.delete_row"><a name="delete_row"></a>
 sketchdb.delete_row</h3>
 <p>Delete a row from a table.</p>
@@ -194,6 +202,7 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb17
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">delete_row</span>(<span class="st">&#39;users&#39;</span><span class="op">,</span> <span class="st">&#39;178&#39;</span>)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(success_function)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.delete_table"><a name="delete_table"></a>
 sketchdb.delete_table</h3>
 <p>Delete an entire table and its rows.</p>
@@ -206,6 +215,7 @@ class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb19
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">delete_table</span>(<span class="st">&#39;students&#39;</span>)</span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(success_function)</span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.filter"><a name="filter"></a> sketchdb.filter</h3>
 <p>Return an array of all rows in a table with a given key/value
 pair.</p>
@@ -219,6 +229,7 @@ matching key/value.</p>
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">filter</span>(<span class="st">&#39;users&#39;</span><span class="op">,</span> <span class="st">&#39;group&#39;</span><span class="op">,</span> <span class="st">&#39;superuser&#39;</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(<span class="bu">console</span><span class="op">.</span><span class="fu">log</span>)</span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 <h3 id="sketchdb.rename_table"><a name="rename_table"></a>
 sketchdb.rename_table</h3>
 <p>Rename a table.</p>
@@ -254,6 +265,7 @@ already has the id.</p>
 class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sketchdb<span class="op">.</span><span class="fu">move_row</span>(<span class="st">&#39;drafts&#39;</span><span class="op">,</span> <span class="st">&#39;posts&#39;</span><span class="op">,</span> <span class="st">&#39;12345&#39;</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(() <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&#39;Row moved!&#39;</span>))</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">catch</span>(handle_error)<span class="op">;</span></span></code></pre></div>
+<hr />
 
 </body>
 </html>

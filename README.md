@@ -1,6 +1,6 @@
 # sketchdb
 
-### About
+## About
 
 This is a small file/directory based app for Node JS that provides some basic database functionality for storing key-value pairs in table/row/entry format as .json files.
 
@@ -8,8 +8,9 @@ The purpose of this library is to provide a simple database-like storage system 
 
 This library requires no dependencies.
 
-### Installation
+# Installation
 
+## Download 
 run
 
 ```console
@@ -18,9 +19,7 @@ npm install sketchdb
 
 in your project's directory to install a local node module.
 
-## Usage
-
-### Setup
+## Setup
 
 run
 
@@ -36,7 +35,9 @@ The setup application will create a new directory in that top level directory of
 
 External edits to directories and files in sketchdb\_store will reflect in the database as long as they are proper JSON.
 
-### API
+# Usage
+
+## API
 
 All function calls to sketchdb return a Promise.
 
@@ -44,7 +45,7 @@ Calls to retrieve data will resolve to that data or reject with an error.
 
 Calls to write data or perform a delete operation will resolve with true on success (this will probably change to an object of some sort with more info but haven't decided yet)
 
-### Methods
+## Methods
 
 * [sketchdb.list\_tables](#list_tables)
 * [sketchdb.create\_table](#create_table)
@@ -78,6 +79,7 @@ sketchdb.update
 
 All other methods follow the same pattern.
 
+***
 
 ### <a name="list_tables"></a> sketchdb.list\_tables
 
@@ -104,6 +106,7 @@ sketchdb.list_tables()
     // Results will be an array like ["users","posts","authors"]
   });
 ```
+***
 
 ### <a name="create_table"></a> sketchdb.create\_table
 
@@ -130,6 +133,8 @@ sketchdb.create_table('users')
 ```
 
 **Note:** You can also create a table by making a subdirectory in "./sketchdb\_store/tables/" with the table name.
+
+***
 
 ### <a name="insert"></a> sketchdb.insert
 
@@ -165,6 +170,8 @@ sketchdb.insert('users', user)
   });
 ```
 
+***
+
 ### <a name="get_row"></a> sketchdb.get\_row
 
 Retrieve a row from a given table.
@@ -190,6 +197,8 @@ sketchdb.get_row('users', '178')
   .catch(handle_error);
 ```
 
+***
+
 ### <a name="get_all"></a> sketchdb.get\_all
 
 Retrieve all rows from a given table as an array.
@@ -209,6 +218,8 @@ sketchdb.get_all('users')
   .then(process_all_users)
   .catch(handle_error);
 ```
+
+***
 
 ### <a name="update"></a> sketchdb.update
 
@@ -236,6 +247,8 @@ sketchdb.update('users', 'uq13g564d', { group: '2' })
   .catch(handle_error);
 ```
 
+***
+
 ### <a name="delete_row"></a> sketchdb.delete\_row
 
 Delete a row from a table.
@@ -255,6 +268,8 @@ sketchdb.delete_row('users', '178')
   .then(success_function)
   .catch(handle_error);
 ```
+
+***
 
 ### <a name="delete_table"></a> sketchdb.delete\_table
 
@@ -276,6 +291,8 @@ sketchdb.delete_table('students')
   .catch(handle_error);
 ```
 
+***
+
 ### <a name="filter"></a> sketchdb.filter
 
 Return an array of all rows in a table with a given key/value pair.
@@ -295,6 +312,8 @@ sketchdb.filter('users', 'group', 'superuser')
   .then(console.log)
   .catch(handle_error);
 ```
+
+***
 
 ### <a name="rename_table"></a> sketchdb.rename\_table
 
@@ -316,7 +335,7 @@ sketchdb.rename_table('authors', 'contributors')
   .catch(handle_error);
 ```
 
----
+***
 
 ### <a name="move_row"></a> sketchdb.move\_row
 
@@ -343,3 +362,5 @@ sketchdb.move_row('drafts', 'posts', '12345')
   .then(() => console.log('Row moved!'))
   .catch(handle_error);
 ```
+
+***
