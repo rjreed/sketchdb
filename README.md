@@ -10,12 +10,16 @@ This library requires no dependencies.
 
 # Installation
 
+Note: sketchdb requires Node.js v18 or higher.
+
 ## Download 
 run
 
 ```console
 npm install sketchdb
 ```
+
+
 
 in your project's directory to install a local node module.
 
@@ -31,9 +35,9 @@ from the top level of your project directory to setup an instance of sketchdb.
 
 Alternatively, call sketchdb.setup() from inside a script (note - sketchdb.setup() is async and returns a promise)
 
-The setup application will create a new directory in that top level directory of the project named "sketchdb\_store" where data will be stored, along with a subdirectory named "tables". (that's all sketchdb-setup does)
+The setup application will create a new directory in that top level directory of the project named "sketchdb_store" where data will be stored, along with a subdirectory named "tables". (That's all sketchdb-setup does)
 
-External edits to directories and files in sketchdb\_store will reflect in the database as long as they are proper JSON.
+External edits to directories and files in sketchdb_store will reflect in the database as long as they are proper JSON.
 
 # Usage
 
@@ -47,16 +51,16 @@ Calls to write data or perform a delete operation will resolve with true on succ
 
 ## Methods
 
-* [sketchdb.list\_tables](#list_tables)
-* [sketchdb.create\_table](#create_table)
+* [sketchdb.list_tables](#list_tables)
+* [sketchdb.create_table](#create_table)
 * [sketchdb.insert](#insert)
-* [sketchdb.get\_row](#get_row)
-* [sketchdb.get\_all](#get_all)
+* [sketchdb.get_row](#get_row)
+* [sketchdb.get_all](#get_all)
 * [sketchdb.update](#update)
-* [sketchdb.delete\_row](#delete_row)
-* [sketchdb.delete\_table](#delete_table)
+* [sketchdb.delete_row](#delete_row)
+* [sketchdb.delete_table](#delete_table)
 * [sketchdb.filter](#filter)
-* [sketchdb.rename\_table](#rename_table)
+* [sketchdb.rename_table](#rename_table)
 
 ### CamelCase Aliases
 
@@ -77,11 +81,9 @@ sketchdb.insert
 sketchdb.update 
 ```
 
-All other methods follow the same pattern.
-
 ***
 
-### <a name="list_tables"></a> sketchdb.list\_tables
+### <a name="list_tables"></a> sketchdb.list_tables
 
 List the tables in the database in array format.
 
@@ -102,13 +104,13 @@ none
 ```javascript
 sketchdb.list_tables()
   .then(function(results) {
-    do_something_with_results();
+    do_something_with_results(results);
     // Results will be an array like ["users","posts","authors"]
   });
 ```
 ***
 
-### <a name="create_table"></a> sketchdb.create\_table
+### <a name="create_table"></a> sketchdb.create_table
 
 Creates a new table in the database.
 
@@ -120,7 +122,7 @@ sketchdb.create_table('table_name')
 
 **Parameters:**
 
-*table\_name:* The name of the table to create (as a string)
+*table_name:* The name of the table to create (as a string)
 
 **Return value:** Returns a Promise. Resolves with true. Rejects with an error if the table exists.
 
@@ -132,7 +134,7 @@ sketchdb.create_table('users')
   .catch(error_handler);
 ```
 
-**Note:** You can also create a table by making a subdirectory in "./sketchdb\_store/tables/" with the table name.
+**Note:** You can also create a table by making a subdirectory in "./sketchdb_store/tables/" with the table name.
 
 ***
 
@@ -154,7 +156,7 @@ sketchdb.insert(table_name, data)
 
 **Parameters:**
 
-* *table\_name* (string): Table to insert into.
+* *table_name* (string): Table to insert into.
 * *id* (string, optional): Unique row id. (Optional, will auto-generate if omitted)
 * *data* (object or JSON string): Data to store as JSON.
 
@@ -169,10 +171,20 @@ sketchdb.insert('users', user)
     // use the returned unique id
   });
 ```
+or
+
+```javascript
+const id = '1234'
+const user = { name: 'John', group: '1' };
+sketchdb.insert('users', id, user)
+  .then(function(id) {
+    // do something next, id is the given id
+  });
+```
 
 ***
 
-### <a name="get_row"></a> sketchdb.get\_row
+### <a name="get_row"></a> sketchdb.get_row
 
 Retrieve a row from a given table.
 
@@ -184,7 +196,7 @@ sketchdb.get_row(table_name, id)
 
 **Parameters:**
 
-* *table\_name* (string): Table name
+* *table_name* (string): Table name
 * *id* (string): Row id
 
 **Return value:** Resolves to the data object for the row, or rejects if not found.
@@ -193,13 +205,20 @@ sketchdb.get_row(table_name, id)
 
 ```javascript
 sketchdb.get_row('users', '178')
-  .then(do_something)
-  .catch(handle_error);
+  .then(user => {
+  // Do something with the user data
+  console.log('User name:', user.name);
+  console.log('User group:', user.group);
+  })
+  .catch(error => {
+  // Handle the error
+  console.error('Error fetching row:', error.message);
+  });
 ```
 
 ***
 
-### <a name="get_all"></a> sketchdb.get\_all
+### <a name="get_all"></a> sketchdb.get_all
 
 Retrieve all rows from a given table as an array.
 
@@ -215,7 +234,10 @@ sketchdb.get_all(table_name)
 
 ```javascript
 sketchdb.get_all('users')
-  .then(process_all_users)
+  .then(users => {
+  //do something with the users array
+  handle_users(users);
+   })
   .catch(handle_error);
 ```
 
@@ -233,7 +255,7 @@ sketchdb.update(table_name, id, data)
 
 **Parameters:**
 
-* *table\_name* (string): Table name
+* *table_name* (string): Table name
 * *id* (string): Row id
 * *data* (object): Data to merge/update
 
@@ -249,7 +271,7 @@ sketchdb.update('users', 'uq13g564d', { group: '2' })
 
 ***
 
-### <a name="delete_row"></a> sketchdb.delete\_row
+### <a name="delete_row"></a> sketchdb.delete_row
 
 Delete a row from a table.
 
@@ -271,7 +293,7 @@ sketchdb.delete_row('users', '178')
 
 ***
 
-### <a name="delete_table"></a> sketchdb.delete\_table
+### <a name="delete_table"></a> sketchdb.delete_table
 
 Delete an entire table and its rows.
 
@@ -309,13 +331,19 @@ sketchdb.filter(table_name, key, value)
 
 ```javascript
 sketchdb.filter('users', 'group', 'superuser')
-  .then(console.log)
-  .catch(handle_error);
+  .then(users => {
+  // Do something with the array of objects
+  handle_users_array(users);
+  })
+  .catch(error => {
+  // Handle the error
+  console.error('Error fetching array:', error.message);
+  });
 ```
 
 ***
 
-### <a name="rename_table"></a> sketchdb.rename\_table
+### <a name="rename_table"></a> sketchdb.rename_table
 
 Rename a table.
 
@@ -337,7 +365,7 @@ sketchdb.rename_table('authors', 'contributors')
 
 ***
 
-### <a name="move_row"></a> sketchdb.move\_row
+### <a name="move_row"></a> sketchdb.move_row
 
 Move a row from one table to another (retaining the same row id).
 
@@ -349,8 +377,8 @@ sketchdb.move_row(from_table, to_table, id)
 
 **Parameters:**
 
-* *from\_table* (string): The table to move the row **from**
-* *to\_table* (string): The table to move the row **to**
+* *from_table* (string): The table to move the row **from**
+* *to_table* (string): The table to move the row **to**
 * *id* (string): The id of the row to move
 
 **Return value:** Resolves with true on success. Rejects with an error if the source row does not exist, or the destination already has the id.
